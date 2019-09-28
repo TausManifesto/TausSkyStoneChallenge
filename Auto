@@ -1,0 +1,335 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+
+/**
+
+ * created by Ashwin Jandhyala
+
+ */
+@Autonomous(name = "Auto", group="Tau")
+
+public class Auto_Mechanum extends LinearOpMode {
+    BNO055IMU imu;
+
+    //@Override
+
+    Hardware robot = new Hardware();
+
+    public double getHeading(){
+        Orientation angles = imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double heading = angles.firstAngle;
+        return heading;
+    }
+
+
+    public double getVelocityX(){
+        Velocity velocity = imu.getVelocity();
+        double xVelcoty = velocity.xVeloc;
+        return xVelcoty;
+    }
+
+    public double getVelocityY(){
+        Velocity velocity = imu.getVelocity();
+        double yVelcoty = velocity.yVeloc;
+        return yVelcoty;
+
+    }
+
+    public double getVelocity(){
+        double velocity = Math.sqrt(Math.pow(getVelocityX(), 2) + Math.pow(getVelocityY(), 2));
+        return velocity;
+    }
+
+    public double distanceTraveled(double time){
+        double distTraveled = getVelocity()*time;
+        return distTraveled;
+    }
+
+    public double DirectionTraveled(){
+        double direcTraveled = Math.atan(getVelocityY()/getVelocityX());
+        return direcTraveled;
+    }
+
+    public void sleepTau(long milliSec)
+    {
+        try{Thread.sleep(milliSec);}catch(InterruptedException e){throw new RuntimeException(e);}
+    }
+
+
+    //Defining Methods for the robot
+
+    public void forward(double power,double distance)
+    {
+        robot.backLeftMotor.setPower(power);
+
+        robot.backRightMotor.setPower(-power);//+
+
+        robot.frontRightMotor.setPower(-power);//+
+
+        robot.frontLeftMotor.setPower(power);
+
+        resetStartTime();
+
+        double time = (ElapsedTime.SECOND_IN_NANO);
+
+        while(distance<distanceTraveled(time)){
+            time = (ElapsedTime.SECOND_IN_NANO);
+            if(getHeading()>5){
+                right(.1, getHeading());
+            }
+            else if(getHeading()<5){
+                left(.1, getHeading());
+            }
+        }
+
+        robot.backLeftMotor.setPower(0);
+
+        robot.backRightMotor.setPower(0);
+
+        robot.frontRightMotor.setPower(0);
+
+        robot.frontLeftMotor.setPower(0);
+
+    }
+
+    public void backward(double power,long distance)
+    {
+        robot.backLeftMotor.setPower(-power);
+
+        robot.backRightMotor.setPower(power);//-
+
+        robot.frontRightMotor.setPower(power);//-
+
+        robot.frontLeftMotor.setPower(-power);
+
+        resetStartTime();
+
+        double time = (ElapsedTime.SECOND_IN_NANO);
+
+        while(distance<distanceTraveled(time)){
+            time = (ElapsedTime.SECOND_IN_NANO);
+            if(getHeading()>5){
+                right(.1, getHeading());
+            }
+            else if(getHeading()<5){
+                left(.1, getHeading());
+            }
+        }
+
+        robot.backLeftMotor.setPower(0);
+
+        robot.backRightMotor.setPower(0);
+
+        robot.frontRightMotor.setPower(0);
+
+        robot.frontLeftMotor.setPower(0);
+
+    }
+
+    public void right(double power,double degrees)
+    {
+
+        robot.backLeftMotor.setPower(power);
+
+        robot.backRightMotor.setPower(power);//-
+
+        robot.frontRightMotor.setPower(power);//-
+
+        robot.frontLeftMotor.setPower(power);
+
+        while (Math.abs(getHeading())<(Math.abs(degrees))){
+
+        }
+
+        robot.backLeftMotor.setPower(0);
+
+        robot.backRightMotor.setPower(0);
+
+        robot.frontRightMotor.setPower(0);
+
+        robot.frontLeftMotor.setPower(0);
+
+    }
+
+    public void left(double power,double degrees)
+    {
+
+        robot.backLeftMotor.setPower(-power);
+
+        robot.backRightMotor.setPower(-power);//+
+
+        robot.frontRightMotor.setPower(-power);//+
+
+        robot.frontLeftMotor.setPower(-power);
+
+        while (Math.abs(getHeading())<(Math.abs(degrees))){
+
+        }
+
+        robot.backLeftMotor.setPower(0);
+
+        robot.backRightMotor.setPower(0);
+
+        robot.frontRightMotor.setPower(0);
+
+        robot.frontLeftMotor.setPower(0);
+
+    }
+
+    public void strafeLeft(double power,long distance)
+    {
+        robot.backLeftMotor.setPower(power);
+
+        robot.backRightMotor.setPower(power);//-
+
+        robot.frontRightMotor.setPower(-power);//+
+
+        robot.frontLeftMotor.setPower(-power);
+
+        resetStartTime();
+
+        double time = (ElapsedTime.SECOND_IN_NANO);
+
+        while(distance<distanceTraveled(time)){
+            time = (ElapsedTime.SECOND_IN_NANO);
+            if(getHeading()>5){
+                right(.1, getHeading());
+            }
+            else if(getHeading()<5){
+                left(.1, getHeading());
+            }
+        }
+
+        robot.backLeftMotor.setPower(0);
+
+        robot.backRightMotor.setPower(0);
+
+        robot.frontRightMotor.setPower(0);
+
+        robot.frontLeftMotor.setPower(0);
+
+    }
+
+    public void strafeRight(double power,long distance)
+    {
+        robot.backLeftMotor.setPower(-power);
+
+        robot.backRightMotor.setPower(-power);//+
+
+        robot.frontRightMotor.setPower(power);//-
+
+        robot.frontLeftMotor.setPower(power);
+
+        resetStartTime();
+
+        double time = (ElapsedTime.SECOND_IN_NANO);
+
+        while(distance<distanceTraveled(time)){
+            time = (ElapsedTime.SECOND_IN_NANO);
+            if(getHeading()>5){
+                right(.1, getHeading());
+            }
+            else if(getHeading()<5){
+                left(.1, getHeading());
+            }
+        }
+
+        robot.backLeftMotor.setPower(0);
+
+        robot.backRightMotor.setPower(0);
+
+        robot.frontRightMotor.setPower(0);
+
+        robot.frontLeftMotor.setPower(0);
+
+    }
+
+    public void direction(double power,long distance,double degrees)
+    {
+        double degreesCalc;
+
+        if(degrees<=45){
+
+            degreesCalc=degrees+315;
+        }
+
+        else{
+
+            degreesCalc=degrees-45;
+        }
+
+        double xVector = power*Math.cos(degreesCalc);
+
+        double yVector = power*Math.sin(degreesCalc);
+
+        robot.backLeftMotor.setPower(xVector);
+
+        robot.backRightMotor.setPower(-yVector);//+
+
+        robot.frontRightMotor.setPower(-xVector);//+
+
+        robot.frontLeftMotor.setPower(yVector);
+
+        resetStartTime();
+
+        double time = (ElapsedTime.SECOND_IN_NANO);
+
+        while(distance<distanceTraveled(time)){
+            time = (ElapsedTime.SECOND_IN_NANO);
+            if(getHeading()>5){
+                right(.1, getHeading());
+            }
+            else if(getHeading()<5){
+                left(.1, getHeading());
+            }
+        }
+
+        robot.backLeftMotor.setPower(0);
+
+        robot.backRightMotor.setPower(0);
+
+        robot.frontRightMotor.setPower(0);
+
+        robot.frontLeftMotor.setPower(0);
+
+    }
+
+
+    @Override
+    public void runOpMode()
+    {
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
+        imu.initialize(parameters);
+
+        robot.initTeleOpNOIMU(hardwareMap);
+
+        waitForStart();
+
+        //forward(.1, 10000);
+
+        //backward(.1, 10000);
+
+        //strafeRight(.1, 10000);
+
+        //direction(1, 1000, 50);
+    }
+
+}
