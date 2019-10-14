@@ -1,0 +1,4 @@
+#Sat Oct 12 11:45:16 CDT 2019
+base.0=/Users/samv/Documents/Avyu/FTC/TausSkyStoneChallenge/TeamCode/build/intermediates/dex/debug/mergeDexDebug/out
+path.0=classes.dex
+renamed.0=classes.dex
