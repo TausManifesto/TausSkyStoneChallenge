@@ -10,7 +10,7 @@
     <exec>
       <option name="COMMAND" value="$ModuleSdkPath$/platform-tools/adb" />
       <option name="PARAMETERS" value="connect 192.168.49.1:5555" />
-      <option name="WORKING_DIRECTORY" />
+      <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
     </exec>
   </tool>
 </toolSet>
