@@ -88,8 +88,8 @@ public class Teleop extends OpMode {
 //        }
         frontleftPOWER += rightGP1X;
         backleftPOWER += rightGP1X;
-        backrightPOWER -= rightGP1X;
-        frontleftPOWER -= rightGP1X;
+        backrightPOWER += rightGP1X;
+        frontleftPOWER += rightGP1X;
         
         maxPOWER = Math.abs(frontleftPOWER);
         if (Math.abs(backleftPOWER) > maxPOWER) {
