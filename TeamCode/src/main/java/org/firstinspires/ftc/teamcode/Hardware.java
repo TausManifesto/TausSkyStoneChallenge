@@ -78,10 +78,10 @@ public class Hardware extends OpMode {
 //        leftIntakeMotor = hwMap.dcMotor.get("left_intake");
 //        rightIntakeMotor = hwMap.dcMotor.get("right_intake");
         /****lift servos*****/
-//        leftLiftServo = hwMap.crservo.get("left_lift");
-//        rightLiftServo = hwMap.crservo.get("right_lift");
-//        leftExtensionServo = hwMap.crservo.get("left_extension");
-//        rightExtensionServo = hwMap.crservo.get("right_extension");
+        leftLiftServo = hwMap.crservo.get("left_lift");
+        rightLiftServo = hwMap.crservo.get("right_lift");
+        leftExtensionServo = hwMap.crservo.get("left_extension");
+        rightExtensionServo = hwMap.crservo.get("right_extension");
 
 
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -97,10 +97,10 @@ public class Hardware extends OpMode {
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
 
-//        leftLiftServo.setPower(0);
-//        rightLiftServo.setPower(0);
-//        leftExtensionServo.setPower(0);
-//        rightExtensionServo.setPower(0);
+        leftLiftServo.setPower(0);
+       rightLiftServo.setPower(0);
+       leftExtensionServo.setPower(0);
+        rightExtensionServo.setPower(0);
 
 //        leftIntakeMotor.setPower(0);
 //        rightIntakeMotor.setPower(0);
