@@ -1,14 +1,18 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import java.util.List;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import java.util.List;
+
 /**
  * This 2019-2020 OpMode illustrates the basics of using the TensorFlow Object Detection API to
  * determine the position of the Skystone game elements.
@@ -19,6 +23,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
+@Disabled
 @Autonomous(name = "ConceptTensorFlowObjectDetection", group = "Concept")
 
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
@@ -72,13 +77,13 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                         if (recognitions.size() > 0) {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
-                            for (Recognition recognition : recognitions) {
-                                if (recognition.getLabel() == "Skystone") {
+                            for (int i = 0; i < recognitions.size(); i++) {
+                                if (recognitions.get(i).getLabel().equalsIgnoreCase("Skystone")) {
                                     // finding if skystone is there or not
-                                    telemetry.addData("Skystone: ", "Detected");
+                                    telemetry.addData("Skystone pos: ", i);
                                     skystone_detected = true;
                                     // getting provided estimated angle
-                                    ObjectAngle = recognition.estimateAngleToObject(AngleUnit.DEGREES);
+                                    ObjectAngle = recognitions.get(i).estimateAngleToObject(AngleUnit.DEGREES);
                                     // showing user object angle
                                     telemetry.addData("Estimated Angle", ObjectAngle);
                                     if (ObjectAngle > 9) {
@@ -92,8 +97,8 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                                         telemetry.addData("Direction", "Left");
                                     }
                                     // Using params to detect how close the block is
-                                    ImageHeight = recognition.getImageHeight();
-                                    ObjectHeight = recognition.getHeight();
+                                    //ImageHeight = recognition.getImageHeight();
+                                    //ObjectHeight = recognition.getHeight();
                                     // Finding Object Height Ratio
                                     // Large Ratio means that the Robot is Closer
                                     ObjectHeightRatio = ObjectHeight / ImageHeight;

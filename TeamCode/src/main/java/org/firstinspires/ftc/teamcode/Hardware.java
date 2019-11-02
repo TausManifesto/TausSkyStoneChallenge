@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -22,6 +23,9 @@ public class Hardware extends OpMode {
     public DcMotor backLeftMotor = null;
     public DcMotor backRightMotor = null;
 
+    //public DcMotor leftIntakeMotor = null;
+    //public DcMotor rightIntakeMotor = null;
+
     public CRServo leftLiftServo = null;
     public CRServo rightLiftServo = null;
     public CRServo leftExtensionServo = null;
@@ -36,6 +40,8 @@ public class Hardware extends OpMode {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
+    BNO055IMU imu;
+
     HardwareMap hwMap;
     private ElapsedTime period = new ElapsedTime();
 
@@ -49,29 +55,64 @@ public class Hardware extends OpMode {
     public void loop() { }
 
     public void init(HardwareMap hwMap, Telemetry telemetry) {
+
+//
+//        imu = hardwareMap.get(BNO055IMU .class, "imu");
+//
+//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//
+//        parameters.mode                = BNO055IMU.SensorMode.IMU;
+//        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+//        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.loggingEnabled      = false;
+//        imu.initialize(parameters);
+
         this.hwMap = hwMap;
 
+        /****wheel motors****/
         frontLeftMotor = hwMap.dcMotor.get("left_front");
         frontRightMotor = hwMap.dcMotor.get("right_front");
         backLeftMotor = hwMap.dcMotor.get("left_back");
         backRightMotor = hwMap.dcMotor.get("right_back");
+        /****intake motors****/
+//        leftIntakeMotor = hwMap.dcMotor.get("left_intake");
+//        rightIntakeMotor = hwMap.dcMotor.get("right_intake");
+        /****lift servos*****/
+//        leftLiftServo = hwMap.crservo.get("left_lift");
+//        rightLiftServo = hwMap.crservo.get("right_lift");
+//        leftExtensionServo = hwMap.crservo.get("left_extension");
+//        rightExtensionServo = hwMap.crservo.get("right_extension");
 
 
+        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        leftIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        rightIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
 
+//        leftLiftServo.setPower(0);
+//        rightLiftServo.setPower(0);
+//        leftExtensionServo.setPower(0);
+//        rightExtensionServo.setPower(0);
+
+//        leftIntakeMotor.setPower(0);
+//        rightIntakeMotor.setPower(0);
+
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+//        leftIntakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        rightIntakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
         public void init_auto(HardwareMap hwMap, Telemetry telemetry){
         init(hwMap, telemetry);
@@ -80,20 +121,34 @@ public class Hardware extends OpMode {
             backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+//            leftIntakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            rightIntakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
             frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+//            leftIntakeMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            rightIntakeMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+//            leftIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            rightIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
             frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
             frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
             backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
             backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+
+//            leftIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
+//            rightIntakeMotor.setDirection(DcMotor.Direction.FORWARD);
+
+
 
 
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
