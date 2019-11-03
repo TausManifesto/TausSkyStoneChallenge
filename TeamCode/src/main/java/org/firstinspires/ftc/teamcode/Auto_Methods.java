@@ -355,7 +355,7 @@ public class Auto_Methods extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> recognitions = tfod.getUpdatedRecognitions();
                     if (recognitions != null) {
-                        if (recognitions.size() > 0) {
+                        if (recognitions.size() == 3) {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
                             for (int i = 0; i < recognitions.size(); i++) {
@@ -365,7 +365,7 @@ public class Auto_Methods extends LinearOpMode {
                                     skystone_detected = true;
                                     // getting provided estimated angle
                                     ObjectAngle = recognitions.get(i).estimateAngleToObject(AngleUnit.DEGREES);
-                                    LeftSide = recognitions.get(i).getRight();
+                                    LeftSide = recognitions.get(i).getLeft();
                                     //RightSide = recognitions.get(i).getRight();
                                     // showing user object angle
                                     telemetry.addData("Estimated Angle", ObjectAngle);
@@ -382,6 +382,8 @@ public class Auto_Methods extends LinearOpMode {
                                         return "Center";
                                     }
                                 }
+
+
                             }
                             telemetry.update();
                         }
