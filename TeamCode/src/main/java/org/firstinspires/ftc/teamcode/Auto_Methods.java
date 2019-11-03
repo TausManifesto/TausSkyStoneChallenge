@@ -30,9 +30,11 @@ public class Auto_Methods extends LinearOpMode {
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
     //Vuforia Key Fragment
+
     private static final String VUFORIA_KEY = "AY7Mgrn/////AAABmfI+bBY2KUjrj+QipjjQqMZkBy9G2EFK3wmdSctymzd4yHsn91iwwOFsV+MCDHbeaRmEFzBv3MqjDt3prE4YDrozJIUKha18nK9zZVHLMJvE7EE2nyQ2W/DTw045lQDRjRuNjuALhnd9RePTFlNJar/yqkADNUAPR+WNlT+Yb2R29d87B8Q352a7kMNXzglLi+yHtBg1fJwygyuxp8vhlgMd5OFRyBEn3VAtqFxpEVJz5AfdQ6wgKIMwJhSONcHuNmEO6Rvp+QDzKDGtdQ69o2WpRHb9auU/mwTFCjY18ZowZoTfihgoZOHL/g4a4uFOiHqbEQNUNTeulQmVRUuh8iWy2OBwf/Ec/uCEM+RiKzxz";
     public boolean skystone_detected = false;
     double ObjectAngle;
+    double LeftSide;
     double TargetHeightRatio;
     int ImageHeight;
     float ObjectHeight;
@@ -97,15 +99,8 @@ public class Auto_Methods extends LinearOpMode {
     }
 
     private double sigmoid(double error) {
-
-        if (error > 60) {
-            return .2;
-        } else if (error > 40) {
-            return .1;
-        } else {
-            return .075;
-        }
-        //return  1/(1 + Math.pow(3, -error/9))-.5;
+        return 8 / (1 + Math.pow(Math.E, -error / 50)) - 4;
+        //1/1 + e ^ -1/20 x
     }
 
 
@@ -113,6 +108,10 @@ public class Auto_Methods extends LinearOpMode {
 
     //moving forward distance (m) with power [0, 1]
     public void forward(double power, double distance) {
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
         robot.backLeftMotor.setTargetPosition(counts);
@@ -147,6 +146,10 @@ public class Auto_Methods extends LinearOpMode {
 
     //moving backward distance (m) with power [0, 1]
     public void backward(double power, long distance) {
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
         robot.backLeftMotor.setTargetPosition(-counts);
@@ -232,16 +235,21 @@ public class Auto_Methods extends LinearOpMode {
         }
 
         //setting motor value to 0 (stop)
-        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
     }
 
     //strafing left distance (m) with power [0, 1]
     public void strafeLeft(double power, long distance) {
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
         robot.backLeftMotor.setTargetPosition(counts);
         robot.backRightMotor.setTargetPosition(-counts);
@@ -277,6 +285,10 @@ public class Auto_Methods extends LinearOpMode {
 
     //strafing right distance (m) with power [0, 1]
     public void strafeRight(double power, long distance) {
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
         robot.backLeftMotor.setTargetPosition(-counts);
@@ -316,7 +328,6 @@ public class Auto_Methods extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -329,19 +340,16 @@ public class Auto_Methods extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.6;
+        tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
     //Finding and returning position of Skystone
-    public String getSkystonePos() {
-
-        boolean yes = true;
-        String pos = "error";
+    public String getSkystonePosRed() {
 
         if (opModeIsActive()) {
-            while (opModeIsActive() && yes) {
+            while (opModeIsActive()) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -351,26 +359,28 @@ public class Auto_Methods extends LinearOpMode {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
                             for (int i = 0; i < recognitions.size(); i++) {
-                                if (recognitions.get(i).getLabel() == "Skystone") {
+                                if (recognitions.get(i).getLabel().equals("Skystone")) {
                                     // finding if skystone is there or not
                                     telemetry.addData("Skystone: ", "Detected");
                                     skystone_detected = true;
                                     // getting provided estimated angle
                                     ObjectAngle = recognitions.get(i).estimateAngleToObject(AngleUnit.DEGREES);
+                                    LeftSide = recognitions.get(i).getRight();
+                                    //RightSide = recognitions.get(i).getRight();
                                     // showing user object angle
                                     telemetry.addData("Estimated Angle", ObjectAngle);
-                                    if (ObjectAngle > 7) {
+                                    telemetry.addData("Position of Left side", LeftSide);
+
+                                    if (LeftSide <= 246) {
                                         telemetry.addData("Direction", "Right");
-                                        pos = "Right";
-                                    } else if (ObjectAngle < 7 && ObjectAngle > -1) {
-                                        telemetry.addData("Direction", "Center");
-                                        pos = "Center";
-                                    } else {
+                                        return "Right";
+                                    } else if (LeftSide >= 250) {
                                         telemetry.addData("Direction", "Left");
-                                        pos = "Left";
+                                        return "Left";
+                                    } else {
+                                        telemetry.addData("Direction", "Center");
+                                        return "Center";
                                     }
-                                    yes = false;
-                                    break;
                                 }
                             }
                             telemetry.update();
@@ -381,7 +391,52 @@ public class Auto_Methods extends LinearOpMode {
 
         }
 
-        return pos;
+        return "ERROR";
+    }
+
+    //Finding and returning position of Skystone
+    public String getSkystonePosBlue() {
+
+        if (opModeIsActive()) {
+            while (opModeIsActive()) {
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> recognitions = tfod.getUpdatedRecognitions();
+                    if (recognitions != null) {
+                        if (recognitions.size() > 0) {
+                            telemetry.addData("# Object Detected", recognitions.size());
+                            // step through the list of recognitions and display boundary info.
+                            for (int i = 0; i < recognitions.size(); i++) {
+                                if (recognitions.get(i).getLabel().equals("Skystone")) {
+                                    // finding if skystone is there or not
+                                    telemetry.addData("Skystone: ", "Detected");
+                                    skystone_detected = true;
+                                    // getting provided estimated angle
+                                    ObjectAngle = recognitions.get(i).estimateAngleToObject(AngleUnit.DEGREES);
+                                    // showing user object angle
+                                    telemetry.addData("Estimated Angle", ObjectAngle);
+
+                                    if (ObjectAngle > 2) {
+                                        telemetry.addData("Direction", "Center");
+                                        return "Left";
+                                    } else if (ObjectAngle > 15) {
+                                        telemetry.addData("Direction", "Left");
+                                        return "Center";
+                                    } else {
+                                        return "Right";
+                                    }
+                                }
+                            }
+                            telemetry.update();
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return "ERROR";
     }
 
     //Finding degrees of Skystone
@@ -436,112 +491,96 @@ public class Auto_Methods extends LinearOpMode {
     public void gotoSkystone(String color, String pos) {
 
         if (pos.equals("Left")) {
-            if (color.equals("Blue")) {
-                strafeLeft(.2, 5);
-            } else {
-                strafeLeft(.2, 15);
+            if (color.equals("Red")) {
+                strafeLeft(.5, 16);
             }
-            forward(.2, 35);
-            backward(.2, 15);
+            forward(.5, 35);
+            backward(.5, 15);
             if (color.equals("Red")) {
                 left(90);
-                backward(.2, 19);
+                backward(.5, 16);
             }
             if (color.equals("Blue")) {
                 right(90);
             }
         } else if (pos.equals("Right")) {
             if (color.equals("Blue")) {
-                strafeRight(.2, 15);
-            } else {
-                strafeRight(.2, 5);
+                strafeRight(.5, 16);
             }
-            forward(.2, 35);
-            backward(.2, 15);
+            forward(.5, 35);
+            backward(.5, 15);
             if (color.equals("Red")) {
                 left(90);
             }
             if (color.equals("Blue")) {
                 right(90);
-                backward(.2, 19);
+                backward(.5, 16);
             }
         } else if (pos.equals("Center")) {
-            forward(.2, 35);
-            backward(.2, 15);
             if (color.equals("Red")) {
-                strafeLeft(.2, 5);
+                strafeLeft(.5, 8);
+            } else {
+                strafeRight(.5, 8);
             }
-            if (color.equals("Blue")) {
-                strafeRight(.2, 16);
-            }
+            forward(.5, 35);
+            backward(.5, 15);
             if (color.equals("Red")) {
                 left(90);
+                backward(.5, 8);
             }
             if (color.equals("Blue")) {
                 right(90);
-            }
-            if (color.equals("Red")) {
-                backward(.2, 8);
-            }
-            if (color.equals("Blue")) {
-                backward(.2, 16);
+                backward(.5, 8);
             }
         }
     }
 
-    //Going to skystone
     public void gotoSkystone2(String color, String pos) {
 
         if (pos.equals("Left")) {
-            if (color.equals("Blue")) {
-                strafeLeft(.2, 5);
-            } else {
-                left(10);
-            }
-            forward(.2, 35);
-            backward(.2, 15);
             if (color.equals("Red")) {
-                left(80);
-                backward(.2, 19);
+                strafeLeft(.5, 16);
+            }
+            forward(.5, 45);
+            left(180);
+            forward(.5, 25);
+            if (color.equals("Red")) {
+                left(90);
+                forward(.5, 16);
             }
             if (color.equals("Blue")) {
                 right(90);
             }
         } else if (pos.equals("Right")) {
             if (color.equals("Blue")) {
-                right(10);
-            } else {
-                strafeRight(.2, 5);
+                strafeRight(.5, 16);
             }
-            forward(.2, 35);
-            backward(.2, 15);
-            if (color.equals("Red")) {
-                left(90);
-            }
-            if (color.equals("Blue")) {
-                right(80);
-                backward(.2, 19);
-            }
-        } else if (pos.equals("Center")) {
-            forward(.2, 35);
-            backward(.2, 15);
-            if (color.equals("Red")) {
-                strafeLeft(.2, 5);
-            }
-            if (color.equals("Blue")) {
-                strafeRight(.2, 16);
-            }
+            forward(.5, 45);
+            left(180);
+            forward(.5, 25);
             if (color.equals("Red")) {
                 left(90);
             }
             if (color.equals("Blue")) {
                 right(90);
+                forward(.5, 16);
             }
+        } else if (pos.equals("Center")) {
             if (color.equals("Red")) {
-                backward(.2, 8);
+                strafeLeft(.5, 8);
+            } else {
+                strafeRight(.5, 8);
+            }
+            forward(.5, 45);
+            left(180);
+            backward(.5, 25);
+            if (color.equals("Red")) {
+                left(90);
+                forward(.5, 8);
             }
             if (color.equals("Blue")) {
-                backward(.2, 16);
+                right(90);
+                forward(.5, 8);
             }
         }
     }

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/samv/Documents/Avyu/FTC/TausSkyStoneChallenge/TeamCode/build/intermediates/incremental/mergeDebugResources/merged.dir/values-fr/values-fr.xml",
+            "outputFile": "C:\\Users\\FTC\\TausSkyStoneChallenge\\TeamCode\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-fr\\values-fr.xml",
             "map": [
                 {
-                    "source": "/Users/samv/.gradle/caches/transforms-2/files-2.1/100272e24923e68cb44c1be302b8fc16/res/values-fr/values-fr.xml",
+                    "source": "C:\\Users\\FTC\\.gradle\\caches\\transforms-2\\files-2.1\\dd1cf78f22bdd94f550130b281f27c97\\support-compat-28.0.0\\res\\values-fr\\values-fr.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

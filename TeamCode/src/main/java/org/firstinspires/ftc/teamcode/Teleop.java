@@ -1,15 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 @TeleOp(name = "Tau TeleOp", group = "Tau")
@@ -31,9 +24,9 @@ public class Teleop extends OpMode {
 
     @Override
     public void init() {
-        robot.init(hardwareMap, telemetry);
         telemetry.addData("Readiness", "NOT READY TO START, PLEASE WAIT");
         telemetry.update();
+        robot.init(hardwareMap);
         telemetry.addData("Readiness", "Press Play to start");
         telemetry.addData("If you notice this", "You are COOL!!! (Charles was here)");
         telemetry.update();
