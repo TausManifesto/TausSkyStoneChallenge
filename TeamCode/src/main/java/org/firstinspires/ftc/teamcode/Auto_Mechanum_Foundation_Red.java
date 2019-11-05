@@ -19,13 +19,19 @@ public class Auto_Mechanum_Foundation_Red extends Auto_Methods {
         //initializing robot
         initRobot();
 
-        //after start is pressed
+        //after start is pressed-
 
         //red -- foundation
-        backward(.4, 30);
-        forward(.4, 27);
-        sleep(10000);
-        strafeRight(.4, 55);
+        liftUp(.5, 1000);
+        backward(.3, 32);
+        liftDrop();
+        forward(.3, 30);
+        liftUp(.5, 1000);
+        //sleep(5000);
+        strafeRight(.2, 40);
+        liftDrop();
+        strafeRight(.2, 20);
+
 
     }
 }

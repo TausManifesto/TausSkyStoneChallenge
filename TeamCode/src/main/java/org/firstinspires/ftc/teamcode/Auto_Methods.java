@@ -131,6 +131,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontLeftMotor.setPower(power);
 
         while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+            idle();
         }
 
 
@@ -145,7 +146,7 @@ public class Auto_Methods extends LinearOpMode {
     }
 
     //moving backward distance (m) with power [0, 1]
-    public void backward(double power, long distance) {
+    public void backward(double power, double distance) {
         robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -169,6 +170,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontLeftMotor.setPower(-power);
 
         while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+            idle();
         }
 
 
@@ -268,6 +270,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontLeftMotor.setPower(-power);
 
         while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+            idle();
         }
 
 
@@ -308,6 +311,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontLeftMotor.setPower(power);
 
         while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+            idle();
         }
 
 
@@ -320,6 +324,28 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+    }
+
+    public void liftUp(double power, int time) {
+        robot.leftLiftServo.setPower(power);
+        robot.rightLiftServo.setPower(power);
+        sleep(time);
+        robot.rightLiftServo.setPower(.1);
+        robot.leftLiftServo.setPower(.1);
+    }
+
+    public void liftDrop() {
+        robot.rightLiftServo.setPower(0);
+        robot.leftLiftServo.setPower(0);
+        sleep(2000);
+    }
+
+    public void liftDown(double power, int time) {
+        robot.leftLiftServo.setPower(-power);
+        robot.rightLiftServo.setPower(-power);
+        sleep(time);
+        robot.rightLiftServo.setPower(0);
+        robot.leftLiftServo.setPower(0);
     }
 
     //Initializing Vuforia
@@ -340,7 +366,7 @@ public class Auto_Methods extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.8;
+        tfodParameters.minimumConfidence = 0.7;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
@@ -355,32 +381,37 @@ public class Auto_Methods extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> recognitions = tfod.getUpdatedRecognitions();
                     if (recognitions != null) {
-                        if (recognitions.size() == 3) {
+                        if (recognitions.size() > 0) {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
-                            for (int i = 0; i < recognitions.size(); i++) {
-                                if (recognitions.get(i).getLabel().equals("Skystone")) {
+                            int i = 0;
+                            for (Recognition recognition : recognitions) {
+                                i++;
+                                telemetry.addData("Number of recognitions: ", recognitions.size());
+                                if (recognition.getLabel().equals("Skystone")) {
                                     // finding if skystone is there or not
                                     telemetry.addData("Skystone: ", "Detected");
                                     skystone_detected = true;
                                     // getting provided estimated angle
-                                    ObjectAngle = recognitions.get(i).estimateAngleToObject(AngleUnit.DEGREES);
-                                    LeftSide = recognitions.get(i).getLeft();
+                                    ObjectAngle = recognition.estimateAngleToObject(AngleUnit.DEGREES);
+                                    LeftSide = recognition.getLeft();
                                     //RightSide = recognitions.get(i).getRight();
                                     // showing user object angle
                                     telemetry.addData("Estimated Angle", ObjectAngle);
                                     telemetry.addData("Position of Left side", LeftSide);
+                                    telemetry.addData("count : ", i);
 
-                                    if (LeftSide <= 246) {
+                                    if (ObjectAngle >= -5) {
                                         telemetry.addData("Direction", "Right");
                                         return "Right";
-                                    } else if (LeftSide >= 250) {
+                                    } else if (ObjectAngle <= -10) {
                                         telemetry.addData("Direction", "Left");
                                         return "Left";
                                     } else {
                                         telemetry.addData("Direction", "Center");
                                         return "Center";
                                     }
+
                                 }
 
 

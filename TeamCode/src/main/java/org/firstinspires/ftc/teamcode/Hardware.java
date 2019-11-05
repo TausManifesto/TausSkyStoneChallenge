@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,6 +20,8 @@ public class Hardware {
     public DcMotor frontRightMotor = null;
     public DcMotor backLeftMotor = null;
     public DcMotor backRightMotor = null;
+    public CRServo leftLiftServo = null;
+    public CRServo rightLiftServo = null;
 
     // Other variable names
     HardwareMap hwMap;
@@ -124,6 +128,16 @@ public class Hardware {
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        // Define Servos
+        leftLiftServo = hwMap.crservo.get("left_lift");
+        rightLiftServo = hwMap.crservo.get("right_lift");
+
+        leftLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLiftServo.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        leftLiftServo.setPower(0);
+        rightLiftServo.setPower(0);
+
     }
 
 
@@ -170,6 +184,16 @@ public class Hardware {
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        // Define Servos
+        leftLiftServo = hwMap.crservo.get("left_lift");
+        rightLiftServo = hwMap.crservo.get("right_lift");
+
+        leftLiftServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftLiftServo.setPower(0);
+        rightLiftServo.setPower(0);
     }
 
 
