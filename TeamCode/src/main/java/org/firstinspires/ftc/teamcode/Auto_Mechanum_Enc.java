@@ -18,8 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * created by ashwin jandhyala
  * 10/6/2019
  */
-@Disabled
-@Autonomous(name = "2019_FTC_Auto_Enc", group = "Tau")
+//@Disabled
+@Autonomous(name = "2019_FTC_Auto_Enc", group="Tau")
 
 public class Auto_Mechanum_Enc extends LinearOpMode {
 
@@ -37,11 +37,13 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
         return angles.firstAngle; //right :: [0, -180] -- left :: [0, 180]
     }
 
-    private double sigmoid(double error) {
+    private  double sigmoid(double error){
 
-        if (error > 40) {
+        if (error>40){
             return .2;
-        } else {
+        }
+
+        else {
             return .11;
         }
         //return  1/(1 + Math.pow(3, -error/9))-.5;
@@ -53,7 +55,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
     //moving forward distance (m) with power [0, 1]
     private void forward(double power, double distance) {
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = (int)((distance/(4*Math.PI))*1075);
         robot.backLeftMotor.setTargetPosition(counts);
         robot.backRightMotor.setTargetPosition(counts);
         robot.frontRightMotor.setTargetPosition(counts);
@@ -70,7 +72,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
         robot.frontRightMotor.setPower(power);
         robot.frontLeftMotor.setPower(power);
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()){
         }
 
 
@@ -87,7 +89,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
     //moving backward distance (m) with power [0, 1]
     private void backward(double power, long distance) {
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = (int)((distance/(4*Math.PI))*1075);
         robot.backLeftMotor.setTargetPosition(-counts);
         robot.backRightMotor.setTargetPosition(-counts);
         robot.frontRightMotor.setTargetPosition(-counts);
@@ -104,7 +106,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
         robot.frontRightMotor.setPower(power);
         robot.frontLeftMotor.setPower(power);
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()){
         }
 
 
@@ -129,15 +131,15 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
         double initAngle = getHeading(); //angle that the robot is at when it starts
 
         //wait until angle turned is >= angle inputted
-        while (initAngle - getHeading() <= degrees) {
+            while (initAngle - getHeading() <= degrees) {
 
             //setting left motors to go forward (positive power)
-            robot.backLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
-            robot.frontLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
+            robot.backLeftMotor.setPower(sigmoid(degrees-(initAngle-getHeading())));
+            robot.frontLeftMotor.setPower(sigmoid(degrees-(initAngle-getHeading())));
 
             //setting right motors to go backward (negative power)
-            robot.backRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
-            robot.frontRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
+            robot.backRightMotor.setPower(-sigmoid(degrees-(initAngle-getHeading()))); //-
+            robot.frontRightMotor.setPower(-sigmoid(degrees-(initAngle-getHeading()))); //-
         }
 
         //setting motor value to 0 (stop)
@@ -162,15 +164,15 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
         double initAngle = getHeading(); //angle that the robot is at when it starts
 
         //wait until angle turned is >= angle inputted
-        while (getHeading() - initAngle <= degrees) {
+        while (getHeading()-initAngle <= degrees) {
 
             //setting left motors to go forward (positive power)
-            robot.backLeftMotor.setPower(-sigmoid(degrees - (initAngle - getHeading())));
-            robot.frontLeftMotor.setPower(-sigmoid(degrees - (initAngle - getHeading())));
+            robot.backLeftMotor.setPower(-sigmoid(degrees-(initAngle-getHeading())));
+            robot.frontLeftMotor.setPower(-sigmoid(degrees-(initAngle-getHeading())));
 
             //setting right motors to go backward (negative power)
-            robot.backRightMotor.setPower(sigmoid(degrees - (initAngle - getHeading()))); //-
-            robot.frontRightMotor.setPower(sigmoid(degrees - (initAngle - getHeading()))); //-
+            robot.backRightMotor.setPower(sigmoid(degrees-(initAngle-getHeading()))); //-
+            robot.frontRightMotor.setPower(sigmoid(degrees-(initAngle-getHeading()))); //-
         }
 
         //setting motor value to 0 (stop)
@@ -186,7 +188,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
 
     //strafing left distance (m) with power [0, 1]
     private void strafeLeft(double power, long distance) {
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = (int)((distance/(4*Math.PI))*1075);
         robot.backLeftMotor.setTargetPosition(counts);
         robot.backRightMotor.setTargetPosition(-counts);
         robot.frontRightMotor.setTargetPosition(counts);
@@ -203,7 +205,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
         robot.frontRightMotor.setPower(power);
         robot.frontLeftMotor.setPower(-power);
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()){
         }
 
 
@@ -222,7 +224,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
     //strafing right distance (m) with power [0, 1]
     private void strafeRight(double power, long distance) {
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = (int)((distance/(4*Math.PI))*1075);
         robot.backLeftMotor.setTargetPosition(-counts);
         robot.backRightMotor.setTargetPosition(counts);
         robot.frontRightMotor.setTargetPosition(-counts);
@@ -239,7 +241,7 @@ public class Auto_Mechanum_Enc extends LinearOpMode {
         robot.frontRightMotor.setPower(-power);
         robot.frontLeftMotor.setPower(power);
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
+        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()){
         }
 
 
