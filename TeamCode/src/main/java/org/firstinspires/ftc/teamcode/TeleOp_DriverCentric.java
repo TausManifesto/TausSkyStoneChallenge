@@ -117,11 +117,14 @@ public class TeleOp_DriverCentric extends LinearOpMode {
                     rightExtensionPower = gamepad2.left_stick_x > 0 ? -0.7 : 0.7;
                 } else {
                     leftExtensionPower = gamepad2.left_stick_x;
-                    rightExtensionPower = -gamepad2.left_stick_x;
+                    rightExtensionPower = gamepad2.left_stick_x;
                 }
                 leftExtensionServo.setPower(leftExtensionPower);
                 rightExtensionServo.setPower(rightExtensionPower);
 
+            } else if (Math.abs(gamepad2.left_stick_x) < 0.05){
+                leftExtensionServo.setPower(0.0);
+                rightExtensionServo.setPower(0.0);
             }
 
             if (gamepad2.a) {
@@ -141,16 +144,19 @@ public class TeleOp_DriverCentric extends LinearOpMode {
                     if (Math.abs(gamepad2.right_stick_y) > 0.7) {
                         //setting power based on movement of joystick up - moving lift up, down - moving lift down
                         leftLiftPower = gamepad2.left_stick_y > 0 ? 0.7 : -0.7;
-                        ;
                         rightLiftPower = gamepad2.left_stick_y > 0 ? -0.7 : 0.7;
                         ;
                     } else {
                         leftLiftPower = gamepad2.left_stick_y;
-                        rightLiftPower = -gamepad2.left_stick_y;
+                        rightLiftPower = gamepad2.left_stick_y;
                     }
                 }
                 leftLiftServo.setPower(leftLiftPower);
                 rightLiftServo.setPower(rightLiftPower);
+            } else if( Math.abs(gamepad2.right_stick_y) < 0.05){
+                leftLiftServo.setPower(0.0);
+                rightLiftServo.setPower(0.0);
+
             }
 
         }
@@ -193,9 +199,9 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
 
     public void drive() {
-        double Protate = gamepad1.right_stick_x / 4;
-        double stick_x = gamepad1.left_stick_x * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2); //Accounts for Protate when limiting magnitude to be less than 1
-        double stick_y = gamepad1.left_stick_y * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2);
+        double Protate = Math.abs(gamepad1.right_stick_x) < 0.05 ? 0 :  gamepad1.right_stick_x/ 4;
+        double stick_x = Math.abs(gamepad1.left_stick_x) < 0.05 ? 0 : gamepad1.left_stick_x * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2); //Accounts for Protate when limiting magnitude to be less than 1
+        double stick_y = Math.abs( gamepad1.left_stick_y) < 0.05 ? 0 : gamepad1.left_stick_y * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2);
         double theta = 0;
         double Px = 0;
         double Py = 0;
