@@ -64,6 +64,7 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
 
     public void drive() {
+        //This condition is used to correct simple touches. if the condition it is true then value would be set it to zero
         double Protate = Math.abs(gamepad1.right_stick_x) <= 0.07 ? 0 :  gamepad1.right_stick_x/ 4;
         double stick_x = Math.abs(gamepad1.left_stick_x) <= 0.07 ? 0 : gamepad1.left_stick_x * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2); //Accounts for Protate when limiting magnitude to be less than 1
         double stick_y = Math.abs( gamepad1.left_stick_y) <= 0.07 ? 0 : gamepad1.left_stick_y * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2);
@@ -132,12 +133,17 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
 
     public void claw() {
-
+        /*
+        We are using x and A buttons for closing and opening claw.
+        We have to keep pressing button X to keep grabbing block.
+        we have to keep pressing button A to release, otherwise it will stop motors
+        We thought that timer is not efficient for control, driver control is better.
+        */
         if(gamepad2.x ){
             robot.clawServo.setPower(0.2);
             telemetry.addData("grabbing block", gamepad2.x);
         } else if(gamepad2.a){
-            telemetry.addData("releasing block", gamepad2.x);
+            telemetry.addData("releasing block", gamepad2.a);
             robot.clawServo.setPower((-0.2));
         }else {
             robot.clawServo.setPower(0.0);
@@ -147,8 +153,17 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
     public void extend(){
 
+        /*
+        When we press right trigger up button extender will extend otherwise 
+        down button will retract.
+        Also, not that we have constant power instead of changing speed with button
+        push value. This will allow driver to control better than how hard we push button.
+        If it is too fast we need to reduce speed or vice versa for increasing speed.
+        */
         if (Math.abs(gamepad2.right_trigger) > 0.05) {
             telemetry.addData("extension", gamepad2.right_trigger);
+            //This condition is based on trigger values it will run motors in forward or reverse direction
+            // for extending or retracting
             extensionPower = gamepad2.right_trigger > 0 ? 0.4 : -0.4;
         } else{
             extensionPower = 0.0;
@@ -159,10 +174,14 @@ public class TeleOp_DriverCentric extends LinearOpMode {
     }
 
     public void lift(){
+        /*
+        We we press left trigger up or down button, the lift will move up or down. Also, please note that
+        pressing left trigger down button will make lift go down until left/right limit switches is not pressed.
+        Note that power for lift is more than extender because it has to work against gravity.
+        */
         if (Math.abs(gamepad2.left_trigger) > 0.07 && !robot.leftLiftLimit.isPressed() && !robot.rightLiftLimit.isPressed()) {
             telemetry.addData("lift", gamepad2.left_trigger);
             liftPower = gamepad2.left_trigger > 0 ? 0.5 : -0.5;
-                    ;
         } else {
             liftPower = 0.0;
         }
