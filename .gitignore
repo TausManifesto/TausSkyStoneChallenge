@@ -1,4 +1,6 @@
 # Compiled class file
+inspection/
+_windows/
 _mac/
 TeamCode/build/
 TeamCode/build/*
@@ -13,13 +15,15 @@ TeamCode/build/*
 .DS_Store
 # Log file
 *.log
-
+*.xml
+*.iml
+local.properties
 # BlueJ files
 *.ctxt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
+.idea/
 # Package Files #
 *.jar
 *.war
