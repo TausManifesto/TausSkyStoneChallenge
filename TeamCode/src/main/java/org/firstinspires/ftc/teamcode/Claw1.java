@@ -21,11 +21,15 @@ public class Claw1  extends LinearOpMode {
 
 
 
+    public Claw1(CRServo clawServo) {
+         this.clawServo = clawServo;
+
+    }
 
     @Override
     public void runOpMode() {
 
-        clawServo = hardwareMap.crservo.get("intake_servo");
+        clawServo = hardwareMap.crservo.get("claw_servo");
         clawServo.setPower(0);
 
         waitForStart();

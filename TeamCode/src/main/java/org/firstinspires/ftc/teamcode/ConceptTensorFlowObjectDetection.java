@@ -74,7 +74,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> recognitions = tfod.getUpdatedRecognitions();
                     if (recognitions != null) {
-                        if (recognitions.size() > 0) {
+                        if (recognitions.size() == 3) {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
                             for (int i = 0; i < recognitions.size(); i++) {
