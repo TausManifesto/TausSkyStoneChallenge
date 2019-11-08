@@ -32,7 +32,11 @@ public class TeleOp_DriverCentric extends LinearOpMode {
     public void runOpMode() {
         robot = new Hardware();
         robot.init(hardwareMap, telemetry);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> first-game-latest
         robot.frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
         robot.backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         robot.backRightMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -162,7 +166,11 @@ public class TeleOp_DriverCentric extends LinearOpMode {
         if (Math.abs(gamepad2.left_trigger) > 0.07 && !robot.leftLiftLimit.isPressed() && !robot.rightLiftLimit.isPressed()) {
             telemetry.addData("lift", gamepad2.left_trigger);
             liftPower = gamepad2.left_trigger > 0 ? 0.5 : -0.5;
+<<<<<<< HEAD
                     ;
+=======
+            ;
+>>>>>>> first-game-latest
         } else {
             liftPower = 0.0;
         }

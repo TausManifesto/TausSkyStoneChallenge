@@ -2,6 +2,7 @@
 inspection/
 _windows/
 _mac/
+.idea/
 TeamCode/build/
 TeamCode/build/*
 **/build/
