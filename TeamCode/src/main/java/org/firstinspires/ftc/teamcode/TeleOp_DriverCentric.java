@@ -18,190 +18,55 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 @TeleOp(name = "Drivercentric", group = "Taus")
 public class TeleOp_DriverCentric extends LinearOpMode {
 
+    private Hardware robot = null;
+
     float rotate_angle = 0;
     double reset_angle = 0;
 
-    private DcMotor front_left_wheel = null;
-    private DcMotor back_left_wheel = null;
-    private DcMotor back_right_wheel = null;
-    private DcMotor front_right_wheel = null;
 
-    BNO055IMU imu;
-
-    private double leftLiftPower = 0;
-    private double rightLiftPower = 0;
-    private double leftExtensionPower = 0;
-    private double rightExtensionPower = 0;
-
-    private CRServo clawServo = null;
-    public CRServo leftLiftServo = null;
-    public CRServo rightLiftServo = null;
-    public CRServo leftExtensionServo = null;
-    public CRServo rightExtensionServo = null;
-
-    private TouchSensor leftLiftLimit = null;
-    private TouchSensor rightLiftLimit = null;
-    //private TouchSensor leftExtensionLimit = null;
-    //private TouchSensor rightExtensionLimit = null;
+    private double liftPower = 0;
+    private double extensionPower = 0;
 
 
     @Override
     public void runOpMode() {
-        front_left_wheel = hardwareMap.dcMotor.get("left_front");
-        back_left_wheel = hardwareMap.dcMotor.get("left_back");
-        back_right_wheel = hardwareMap.dcMotor.get("right_back");
-        front_right_wheel = hardwareMap.dcMotor.get("right_front");
-        leftLiftServo = hardwareMap.crservo.get("left_lift");
-        rightLiftServo = hardwareMap.crservo.get("right_lift");
-        leftExtensionServo = hardwareMap.crservo.get("left_extension");
-        rightExtensionServo = hardwareMap.crservo.get("right_extension");
-        clawServo = hardwareMap.crservo.get("intake_servo");
-        leftLiftLimit = hardwareMap.get(TouchSensor.class, "left_lift_limit0");
-        rightLiftLimit = hardwareMap.get(TouchSensor.class, "right_lift_limit0");
-        //leftExtensionLimit = hardwareMap.get(TouchSensor.class, "leftExtensionLimit");
-        //rightExtensionLimit = hardwareMap.get(TouchSensor.class, "rightExtensionLimit");
+        robot = new Hardware();
+        robot.init(hardwareMap, telemetry);
 
-        front_left_wheel.setDirection(DcMotor.Direction.REVERSE);
-        back_left_wheel.setDirection(DcMotor.Direction.REVERSE);
-        front_right_wheel.setDirection(DcMotor.Direction.FORWARD);
-        back_right_wheel.setDirection(DcMotor.Direction.FORWARD);
+        robot.frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        robot.backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        robot.backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        robot.frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        front_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        back_left_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        front_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        back_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        leftExtensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightExtensionServo.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
-        imu.initialize(parameters);
 
         while (!opModeIsActive()) {
         }
 
         while (opModeIsActive()) {
-            resetAngle();
             drive();
 
+            resetAngle();
 
-            // This commands are for claw functionality
-            if (gamepad2.x) {
-                telemetry.addData("grabbing block", gamepad2.x);
-                telemetry.update();
-                grabBlock("grab");
-            }
-            if (gamepad2.b) {
-                telemetry.addData("releasing block", gamepad2.b);
-                telemetry.update();
-                grabBlock("release");
-            }
+            //Pressing gamepad2.x is for closing claw and gamepad2.A is for opening claw
+            claw();
 
+            //gamepad2 left trigger is for extending or retracting
+            extend();
 
-            if (Math.abs(gamepad2.left_stick_x) > 0.05) {
-                telemetry.addData("extension", gamepad2.left_stick_x);
-                //this will make sure we are using 70% power only
-                if (Math.abs(gamepad2.left_stick_x) > 0.7) {
-                    //setting power based on movement of joystick right- extending, left - retracting
-                    leftExtensionPower = gamepad2.left_stick_x > 0 ? 0.7 : -0.7;
-                    rightExtensionPower = gamepad2.left_stick_x > 0 ? -0.7 : 0.7;
-                } else {
-                    leftExtensionPower = gamepad2.left_stick_x;
-                    rightExtensionPower = gamepad2.left_stick_x;
-                }
-                leftExtensionServo.setPower(leftExtensionPower);
-                rightExtensionServo.setPower(rightExtensionPower);
+            //gamepad2 trigger is for lift going up and down.
+            lift();
 
-            } else if (Math.abs(gamepad2.left_stick_x) < 0.05){
-                leftExtensionServo.setPower(0.0);
-                rightExtensionServo.setPower(0.0);
-            }
-
-            if (gamepad2.a) {
-
-                leftLiftServo.setPower(0.1);
-                rightLiftServo.setPower(0.1);
-            }
-
-            if (Math.abs(gamepad2.right_stick_y) > 0.05) {
-                telemetry.addData("Stick_Y", gamepad2.right_stick_y);
-                if (leftLiftLimit.isPressed() || rightLiftLimit.isPressed()) {
-                    leftLiftPower = 0.0;
-                    rightLiftPower = 0.0;
-
-                } else {
-                    //this will make sure we are using 70% power only
-                    if (Math.abs(gamepad2.right_stick_y) > 0.7) {
-                        //setting power based on movement of joystick up - moving lift up, down - moving lift down
-                        leftLiftPower = gamepad2.left_stick_y > 0 ? 0.7 : -0.7;
-                        rightLiftPower = gamepad2.left_stick_y > 0 ? -0.7 : 0.7;
-                        ;
-                    } else {
-                        leftLiftPower = gamepad2.left_stick_y;
-                        rightLiftPower = gamepad2.left_stick_y;
-                    }
-                }
-                leftLiftServo.setPower(leftLiftPower);
-                rightLiftServo.setPower(rightLiftPower);
-            } else if( Math.abs(gamepad2.right_stick_y) < 0.05){
-                leftLiftServo.setPower(0.0);
-                rightLiftServo.setPower(0.0);
-
-            }
+            telemetry.update();
 
         }
     }
 
-    public void driveSimple() {
-        double power = .5;
-        if (gamepad1.dpad_up) { //Forward
-            front_left_wheel.setPower(-power);
-            back_left_wheel.setPower(-power);
-            back_right_wheel.setPower(-power);
-            front_right_wheel.setPower(-power);
-        } else if (gamepad1.dpad_left) { //Left
-            front_left_wheel.setPower(power);
-            back_left_wheel.setPower(-power);
-            back_right_wheel.setPower(power);
-            front_right_wheel.setPower(-power);
-        } else if (gamepad1.dpad_down) { //Back
-            front_left_wheel.setPower(power);
-            back_left_wheel.setPower(power);
-            back_right_wheel.setPower(power);
-            front_right_wheel.setPower(power);
-        } else if (gamepad1.dpad_right) { //Right
-            front_left_wheel.setPower(-power);
-            back_left_wheel.setPower(power);
-            back_right_wheel.setPower(-power);
-            front_right_wheel.setPower(power);
-        } else if (Math.abs(gamepad1.right_stick_x) > 0) { //Rotation
-            front_left_wheel.setPower(-gamepad1.right_stick_x);
-            back_left_wheel.setPower(-gamepad1.right_stick_x);
-            back_right_wheel.setPower(gamepad1.right_stick_x);
-            front_right_wheel.setPower(gamepad1.right_stick_x);
-        } else {
-            front_left_wheel.setPower(0);
-            back_left_wheel.setPower(0);
-            back_right_wheel.setPower(0);
-            front_right_wheel.setPower(0);
-        }
-    }
 
 
     public void drive() {
-        double Protate = Math.abs(gamepad1.right_stick_x) < 0.05 ? 0 :  gamepad1.right_stick_x/ 4;
-        double stick_x = Math.abs(gamepad1.left_stick_x) < 0.05 ? 0 : gamepad1.left_stick_x * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2); //Accounts for Protate when limiting magnitude to be less than 1
-        double stick_y = Math.abs( gamepad1.left_stick_y) < 0.05 ? 0 : gamepad1.left_stick_y * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2);
+        double Protate = Math.abs(gamepad1.right_stick_x) <= 0.07 ? 0 :  gamepad1.right_stick_x/ 4;
+        double stick_x = Math.abs(gamepad1.left_stick_x) <= 0.07 ? 0 : gamepad1.left_stick_x * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2); //Accounts for Protate when limiting magnitude to be less than 1
+        double stick_y = Math.abs( gamepad1.left_stick_y) <= 0.07 ? 0 : gamepad1.left_stick_y * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2);
         double theta = 0;
         double Px = 0;
         double Py = 0;
@@ -239,18 +104,11 @@ public class TeleOp_DriverCentric extends LinearOpMode {
         Px = Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)) * (Math.sin(theta + Math.PI / 4));
         Py = Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)) * (Math.sin(theta - Math.PI / 4));
 
-        telemetry.addData("Stick_X", stick_x);
-        telemetry.addData("Stick_Y", stick_y);
-        telemetry.addData("Magnitude", Math.sqrt(Math.pow(stick_x, 2) + Math.pow(stick_y, 2)));
-        telemetry.addData("Front Left", Py - Protate);
-        telemetry.addData("Back Left", Px - Protate);
-        telemetry.addData("Back Right", Py + Protate);
-        telemetry.addData("Front Right", Px + Protate);
 
-        front_left_wheel.setPower(Py - Protate);
-        back_left_wheel.setPower(Px - Protate);
-        back_right_wheel.setPower(Py + Protate);
-        front_right_wheel.setPower(Px + Protate);
+        robot.frontLeftMotor.setPower(Py - Protate);
+        robot.backLeftMotor.setPower(Px - Protate);
+        robot.backRightMotor.setPower(Py + Protate);
+        robot.frontRightMotor.setPower(Px + Protate);
     }
 
 
@@ -261,7 +119,7 @@ public class TeleOp_DriverCentric extends LinearOpMode {
     }
 
     public double getHeading() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double heading = angles.firstAngle;
         if (heading < -180) {
             heading = heading + 360;
@@ -273,22 +131,44 @@ public class TeleOp_DriverCentric extends LinearOpMode {
     }
 
 
-    public void grabBlock(String type) {
+    public void claw() {
 
-        if (type.equalsIgnoreCase("grab")) {
-
-            clawServo.setPower(0.3);
-            sleep(1000);
-            clawServo.setPower(0.1);
-
-        } else if (type.equalsIgnoreCase("release")) {
-
-            clawServo.setPower(-0.3);
-            sleep(500);
-            clawServo.setPower(0);
-
+        if(gamepad2.x ){
+            robot.clawServo.setPower(0.2);
+            telemetry.addData("grabbing block", gamepad2.x);
+        } else if(gamepad2.a){
+            telemetry.addData("releasing block", gamepad2.x);
+            robot.clawServo.setPower((-0.2));
+        }else {
+            robot.clawServo.setPower(0.0);
         }
 
+    }
+
+    public void extend(){
+
+        if (Math.abs(gamepad2.right_trigger) > 0.05) {
+            telemetry.addData("extension", gamepad2.right_trigger);
+            extensionPower = gamepad2.right_trigger > 0 ? 0.4 : -0.4;
+        } else{
+            extensionPower = 0.0;
+        }
+        robot.leftExtensionServo.setPower(extensionPower);
+        robot.rightExtensionServo.setPower(extensionPower);
+
+    }
+
+    public void lift(){
+        if (Math.abs(gamepad2.left_trigger) > 0.07 && !robot.leftLiftLimit.isPressed() && !robot.rightLiftLimit.isPressed()) {
+            telemetry.addData("lift", gamepad2.left_trigger);
+            liftPower = gamepad2.left_trigger > 0 ? 0.5 : -0.5;
+            ;
+        } else {
+            liftPower = 0.0;
+        }
+
+        robot.leftLiftServo.setPower(liftPower);
+        robot.rightLiftServo.setPower(liftPower);
 
     }
 }

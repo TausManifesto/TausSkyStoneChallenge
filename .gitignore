@@ -1,5 +1,6 @@
 # Compiled class file
 _mac/
+.idea/
 TeamCode/build/
 TeamCode/build/*
 **/build/
