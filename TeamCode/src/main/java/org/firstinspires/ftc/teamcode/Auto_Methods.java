@@ -366,7 +366,7 @@ public class Auto_Methods extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.7;
+        tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
@@ -380,13 +380,12 @@ public class Auto_Methods extends LinearOpMode {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> recognitions = tfod.getUpdatedRecognitions();
+                    //telemetry.addData("# Object Detected", recognitions.size());
                     if (recognitions != null) {
                         if (recognitions.size() > 0) {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
-                            int i = 0;
                             for (Recognition recognition : recognitions) {
-                                i++;
                                 telemetry.addData("Number of recognitions: ", recognitions.size());
                                 if (recognition.getLabel().equals("Skystone")) {
                                     // finding if skystone is there or not
@@ -399,7 +398,6 @@ public class Auto_Methods extends LinearOpMode {
                                     // showing user object angle
                                     telemetry.addData("Estimated Angle", ObjectAngle);
                                     telemetry.addData("Position of Left side", LeftSide);
-                                    telemetry.addData("count : ", i);
 
                                     if (ObjectAngle >= -5) {
                                         telemetry.addData("Direction", "Right");
@@ -427,7 +425,7 @@ public class Auto_Methods extends LinearOpMode {
         return "ERROR";
     }
 
-    //Finding and returning position of Skystone
+    //Finding degrees of Skystone
     public String getSkystonePosBlue() {
 
         if (opModeIsActive()) {
@@ -471,55 +469,6 @@ public class Auto_Methods extends LinearOpMode {
 
         return "ERROR";
     }
-
-    //Finding degrees of Skystone
-    public Double getSkystoneAngle() {
-
-        boolean yes = true;
-        double deg = 100;
-
-        if (opModeIsActive()) {
-            while (opModeIsActive() && yes) {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> recognitions = tfod.getUpdatedRecognitions();
-                    if (recognitions != null) {
-                        if (recognitions.size() > 0) {
-                            telemetry.addData("# Object Detected", recognitions.size());
-                            // step through the list of recognitions and display boundary info.
-                            for (Recognition recognition : recognitions) {
-                                if (recognition.getLabel() == "Skystone") {
-                                    // finding if skystone is there or not
-                                    telemetry.addData("Skystone: ", "Detected");
-                                    skystone_detected = true;
-                                    // getting provided estimated angle
-                                    ObjectAngle = recognition.estimateAngleToObject(AngleUnit.DEGREES);
-                                    // showing user object angle
-                                    telemetry.addData("Estimated Angle", ObjectAngle);
-                                    if (ObjectAngle > 9) {
-                                        telemetry.addData("Direction", "Right");
-                                    } else if (ObjectAngle < 9 && ObjectAngle > 3) {
-                                        telemetry.addData("Direction", "Center");
-                                    } else {
-                                        telemetry.addData("Direction", "Left");
-                                    }
-                                    deg = ObjectAngle;
-                                    yes = false;
-                                    break;
-                                }
-                            }
-                            telemetry.update();
-                        }
-                    }
-                }
-            }
-
-        }
-
-        return deg;
-    }
-
     //Going to skystone
     public void gotoSkystone(String color, String pos) {
 
@@ -574,7 +523,7 @@ public class Auto_Methods extends LinearOpMode {
             if (color.equals("Red")) {
                 strafeLeft(.5, 16);
             }
-            forward(.5, 45);
+            forward(.5, 15);
             left(180);
             forward(.5, 25);
             if (color.equals("Red")) {
@@ -588,7 +537,7 @@ public class Auto_Methods extends LinearOpMode {
             if (color.equals("Blue")) {
                 strafeRight(.5, 16);
             }
-            forward(.5, 45);
+            forward(.5, 15);
             left(180);
             forward(.5, 25);
             if (color.equals("Red")) {
@@ -604,7 +553,7 @@ public class Auto_Methods extends LinearOpMode {
             } else {
                 strafeRight(.5, 8);
             }
-            forward(.5, 45);
+            forward(.5, 15);
             left(180);
             backward(.5, 25);
             if (color.equals("Red")) {

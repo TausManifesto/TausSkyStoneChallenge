@@ -23,13 +23,16 @@ public class Auto_Mechanum_Foundation_Red extends Auto_Methods {
 
         //red -- foundation
         liftUp(.5, 1000);
-        backward(.3, 32);
+        strafeLeft(.2, 12);
+        backward(.3, 35);
         liftDrop();
-        forward(.3, 30);
+        forward(.5, 35);
+        right(10);
         liftUp(.5, 1000);
-        //sleep(5000);
-        strafeRight(.2, 40);
+        sleep(1000);
+        strafeRight(.2, 35);
         liftDrop();
+        forward(.2, 5);
         strafeRight(.2, 20);
 
 

@@ -9,8 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * created by ashwin jandhyala
  * 10/6/2019
  */
-//@Disabled
-@Autonomous(name = "2019_FTC_Auto_Blocks", group = "Tau")
+@Autonomous(name = "2019_FTC_Auto_Blocks_Red", group = "Tau")
 
 public class Auto_Mechanum_Blocks_Red extends Auto_Methods {
 
@@ -28,6 +27,7 @@ public class Auto_Mechanum_Blocks_Red extends Auto_Methods {
         //NO INTAKE
 
         //red -- blocks -- no intake
+        forward(.7, 30);
         gotoSkystone2("Red", position);
         forward(.7, 50);
         backward(.7, 25);
