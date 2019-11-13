@@ -11,9 +11,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+/**
+ * Created by Charles Sun 10/18/2019.
+ */
 
 @TeleOp(name = "Tau TeleOp", group = "Tau")
-public class Robotcentric extends OpMode {
+public class TeleOp_RobotCentric extends OpMode {
     Hardware robot = new Hardware();
     ElapsedTime period = new ElapsedTime();
 
@@ -101,7 +104,7 @@ public class Robotcentric extends OpMode {
         backrightPOWER = -leftGP1Y - leftGP1X + rightGP1X;
         frontleftPOWER = leftGP1Y + leftGP1X + rightGP1X;
         frontrightPOWER = -leftGP1Y + leftGP1X + rightGP1X;
-
+//       controls if trigger is needed for turning
 
 //        if (gamepad1.left_trigger > 0.05) {
 //            frontrightPOWER = frontrightPOWER - gamepad1.left_trigger * triggerConstant;
@@ -142,38 +145,31 @@ public class Robotcentric extends OpMode {
         robot.backLeftMotor.setPower(backleftPOWER);
         robot.backRightMotor.setPower(backrightPOWER);
 
-        if(gamepad2.x ){
-            robot.clawServo.setPower(0.7);
-            telemetry.addData("grabbing block", gamepad2.x);
-        } else if(gamepad2.a){
-            telemetry.addData("releasing block", gamepad2.x);
-            robot.clawServo.setPower((-0.2));
-        }else {
-            robot.clawServo.setPower(0.0);
+        if (Math.abs(gamepad2.left_trigger) > 0.07 ) {
+            telemetry.addData("lift", gamepad2.left_trigger);
+            liftPower = 0.5;
+        }else if(gamepad2.left_bumper){
+            liftPower = -0.1;
+
+        } else {
+            liftPower = 0.1;
         }
 
-
+        robot.leftLiftServo.setPower(liftPower);
+        robot.rightLiftServo.setPower(liftPower);
 
         if (Math.abs(gamepad2.right_trigger) > 0.05) {
             telemetry.addData("extension", gamepad2.right_trigger);
-            extensionPower = gamepad2.right_trigger > 0 ? 0.4 : -0.4;
-        } else{
+            extensionPower = .4;
+        }
+        else if(gamepad2.right_bumper){
+            extensionPower = -.4;
+        }
+        else{
             extensionPower = 0.0;
         }
         robot.leftExtensionServo.setPower(extensionPower);
         robot.rightExtensionServo.setPower(extensionPower);
-
-
-
-
-        if (Math.abs(gamepad2.left_trigger) > 0.07 && !robot.leftLiftLimit.isPressed()) {
-            telemetry.addData("lift", gamepad2.left_trigger);
-            liftPower = gamepad2.left_trigger > 0 ? 0.5 : -0.5;
-        } else {
-            liftPower = 0.0;
-        }
-        robot.leftLiftServo.setPower(liftPower);
-        robot.rightLiftServo.setPower(liftPower);
 
 
 
