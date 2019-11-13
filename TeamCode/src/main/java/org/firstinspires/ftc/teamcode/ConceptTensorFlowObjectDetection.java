@@ -25,7 +25,9 @@ import java.util.List;
  */
 @Disabled
 @Autonomous(name = "ConceptTensorFlowObjectDetection", group = "Concept")
-
+/**
+ * Created by Charles Sun 10/18/2019.
+ */
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     // Declaring Labels and ObjDetect Models
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
