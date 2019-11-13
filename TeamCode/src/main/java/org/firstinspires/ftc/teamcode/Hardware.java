@@ -17,7 +17,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 
-
+/**
+ * Created by Charles Sun 10/18/2019.
+ */
 public class Hardware extends OpMode {
     public DcMotor frontLeftMotor = null;
     public DcMotor frontRightMotor = null;
