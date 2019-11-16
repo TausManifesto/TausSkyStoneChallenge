@@ -716,7 +716,6 @@ id action_bar_root
 id action_bar_spinner
 id action_bar_subtitle
 id action_bar_title
-id action_blocks
 id action_configure_robot
 id action_container
 id action_context_bar
@@ -731,12 +730,10 @@ id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
 id action_program_and_manage
-id action_programming_mode
 id action_restart_robot
 id action_settings
 id action_text
 id actions
-id active_connections
 id activity_chooser_view_content
 id activity_fix_misconfig_wifi_direct
 id add
@@ -792,7 +789,6 @@ id device_interface_module_name
 id devices_holder
 id devices_info_btn
 id disconnect_from_wifidirect
-id display_server_log_button
 id doneButton
 id dropdown_layout
 id editTextResult
@@ -836,7 +832,6 @@ id info
 id infoButton
 id info_btn
 id inspectionRootLayout
-id instructions_and_status_container
 id isCCInstalled
 id isDSInstalled
 id isRCInstalled
@@ -869,8 +864,6 @@ id list_item
 id load_bottom
 id loadingIndicator
 id loadingIndicatorOverlay
-id log
-id log_container
 id lynxAddressButtons
 id lynxAddressListInstructions
 id lynxFirmwareInstructionsPost
@@ -890,7 +883,6 @@ id moduleSerialText
 id monitorContainer
 id motors_title
 id multiply
-id network_name
 id new_button
 id none
 id normal
@@ -901,7 +893,6 @@ id orange_end_of_list_anchor
 id osVersion
 id osVersionLayout
 id parentPanel
-id passphrase
 id permDeniedText
 id port0
 id port1
@@ -946,8 +937,6 @@ id search_src_text
 id search_voice_btn
 id select_dialog_listview
 id serialNumber
-id server_status
-id server_url
 id servos_title
 id shortcut
 id spacer
@@ -983,7 +972,6 @@ id textGamepad2
 id textNetworkConnectionStatus
 id textOpMode
 id textPleaseWait
-id textRemoteProgrammingMode
 id textRobotStatus
 id textSpacerNoButtons
 id textSpacerNoTitle
@@ -1019,7 +1007,6 @@ id txtModel
 id uniform
 id up
 id webView
-id webViewBlockly
 id webViewBlocksRuntime
 id widiConnected
 id widiName
@@ -1059,7 +1046,6 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
-layout activity_blocks
 layout activity_config_wifi_direct
 layout activity_configure_from_template
 layout activity_ftc_configuration
@@ -1073,7 +1059,6 @@ layout activity_inspection
 layout activity_load
 layout activity_permissions_validator
 layout activity_program_and_manage
-layout activity_programming_mode
 layout activity_swap_usb_devices
 layout activity_view_logs
 layout analog_input_device
@@ -1682,9 +1667,6 @@ string prefedit_wifi_automute_summary
 string preferred_imu_name
 string program_and_manage_activity
 string program_and_manage_menu_item
-string programming_mode
-string programming_mode_activity
-string programming_mode_menu_item
 string progressPleaseWait
 string progressUpdatingDeviceFirmware
 string quotes
@@ -1788,7 +1770,6 @@ string title_activity_load
 string title_activity_wifi_channel_selector
 string title_activity_wifi_remembered_groups_editor
 string toastCantCreateRobotConfigFilesDir
-string toastConfigureRobotBeforeProgrammingMode
 string toastDisableWifi
 string toastDisableWifiWarn
 string toastDisconnectedFromWifiDirect
