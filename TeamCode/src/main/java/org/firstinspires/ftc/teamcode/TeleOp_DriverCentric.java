@@ -20,6 +20,10 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
     float rotate_angle = 0;
     double reset_angle = 0;
+    double intakePower = 0;
+    double clawPower = 0;
+    boolean clawIsOpen = false;
+
 
     private DcMotor front_left_wheel = null;
     private DcMotor back_left_wheel = null;
@@ -42,6 +46,9 @@ public class TeleOp_DriverCentric extends LinearOpMode {
     //private TouchSensor leftExtensionLimit = null;
     //private TouchSensor rightExtensionLimit = null;
 
+    private DcMotor right_intake = null;
+    private DcMotor left_intake = null;
+
 
 
     @Override
@@ -59,6 +66,9 @@ public class TeleOp_DriverCentric extends LinearOpMode {
         rightLiftLimit = hardwareMap.get(TouchSensor.class, "right_lift_limit0");
         //leftExtensionLimit = hardwareMap.get(TouchSensor.class, "leftExtensionLimit");
         //rightExtensionLimit = hardwareMap.get(TouchSensor.class, "rightExtensionLimit");
+        right_intake = hardwareMap.dcMotor.get("right_intake");
+        left_intake = hardwareMap.dcMotor.get("left_intake");
+
 
         front_left_wheel.setDirection(DcMotor.Direction.REVERSE);
         back_left_wheel.setDirection(DcMotor.Direction.REVERSE);
@@ -74,6 +84,10 @@ public class TeleOp_DriverCentric extends LinearOpMode {
         rightExtensionServo.setDirection(DcMotorSimple.Direction.FORWARD);
         leftLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
         rightLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        right_intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        left_intake.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -103,6 +117,15 @@ public class TeleOp_DriverCentric extends LinearOpMode {
             //gamepad2 trigger is for lift going up and down.
             lift();
 
+            //gamepad1.y is for the block to be intaked
+            intake();
+
+            //gamepad1.b is for the block to be outtaked
+            outtake();
+
+            //gamepad1.x is for the intake to stop
+            stopIntake();
+
             telemetry.update();
 
         }
@@ -111,7 +134,7 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
 
     public void drive() {
-        double Protate =  gamepad1.right_stick_x/ 4;
+        double Protate =  gamepad1.right_stick_x/ 3;
         double stick_x =  gamepad1.left_stick_x * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2); //Accounts for Protate when limiting magnitude to be less than 1
         double stick_y =  gamepad1.left_stick_y * Math.sqrt(Math.pow(1 - Math.abs(Protate), 2) / 2);
         double theta = 0;
@@ -135,14 +158,14 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
         //Linear directions in case you want to do straight lines.
         if (gamepad1.dpad_right) {
-            stick_x = 0.5;
+            stick_x = 1.0;
         } else if (gamepad1.dpad_left) {
-            stick_x = -0.5;
+            stick_x = -1.0;
         }
         if (gamepad1.dpad_up) {
-            stick_y = -0.5;
+            stick_y = -1.0;
         } else if (gamepad1.dpad_down) {
-            stick_y = 0.5;
+            stick_y = 1.0;
         }
 
 
@@ -187,16 +210,17 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
     public void claw() {
 
-        if(gamepad2.x ){
-            clawServo.setPower(0.5);
-            telemetry.addData("grabbing block", gamepad2.x);
-        } else if(gamepad2.a){
-            telemetry.addData("releasing block", gamepad2.x);
-            clawServo.setPower((-0.5));
-            sleep(1000);
-            clawServo.setPower(-0.1);
-        }else {
-            clawServo.setPower(0.0);
+        if(gamepad2.x){
+            clawServo.setPower(0.2);
+
+        } else if(gamepad2.b) {
+            clawServo.setPower(-0.7);
+            sleep(500);
+            clawServo.setPower(0.3);
+
+        }else{
+
+            clawServo.setPower(0);
         }
 
     }
@@ -205,10 +229,10 @@ public class TeleOp_DriverCentric extends LinearOpMode {
 
         if (Math.abs(gamepad2.right_trigger) > 0.05) {
             telemetry.addData("extension", gamepad2.right_trigger);
-            extensionPower = .4;
+            extensionPower = 0.4;
         }
         else if(gamepad2.right_bumper){
-            extensionPower = -.4;
+            extensionPower = -0.4;
         }
         else{
             extensionPower = 0.0;
@@ -222,15 +246,52 @@ public class TeleOp_DriverCentric extends LinearOpMode {
         if (Math.abs(gamepad2.left_trigger) > 0.07 ) {
             telemetry.addData("lift", gamepad2.left_trigger);
             liftPower = 0.5;
+            sleep(500);
+            liftPower = 0.1;
         }else if(gamepad2.left_bumper){
             liftPower = -0.1;
 
         } else {
-            liftPower = 0.1;
+            liftPower = 0;
         }
 
         leftLiftServo.setPower(liftPower);
         rightLiftServo.setPower(liftPower);
 
+    }
+
+    public void intake() {
+
+        if (gamepad1.a) {
+            intakePower = 0.7;
+        }
+        telemetry.addData("intakePower", intakePower);
+        telemetry.update();
+        right_intake.setPower(intakePower);
+        left_intake.setPower(intakePower);
+
+    }
+
+    public void outtake() {
+
+        if (gamepad1.b) {
+            intakePower = -0.7;
+        }
+
+        telemetry.addData("outtakePower", intakePower);
+        telemetry.update();
+        right_intake.setPower(intakePower);
+        left_intake.setPower(intakePower);
+    }
+
+    public void stopIntake() {
+
+        if (gamepad1.x) {
+
+            intakePower = 0;
+        }
+
+        right_intake.setPower(intakePower);
+        left_intake.setPower(intakePower);
     }
 }
