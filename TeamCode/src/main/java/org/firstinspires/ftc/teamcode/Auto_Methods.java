@@ -99,8 +99,8 @@ public class Auto_Methods extends LinearOpMode {
     }
 
     private double sigmoid(double error) {
-        return 8 / (1 + Math.pow(Math.E, -error / 50)) - 4;
-        //1/1 + e ^ -1/20 x
+        //return 1.4 / (1 + Math.pow(Math.E, -error)/20) - .7;
+        return .15;
     }
 
 
@@ -228,8 +228,8 @@ public class Auto_Methods extends LinearOpMode {
         while (getHeading() - initAngle <= degrees) {
 
             //setting left motors to go forward (positive power)
-            robot.backLeftMotor.setPower(-sigmoid(degrees - (initAngle - getHeading())));
-            robot.frontLeftMotor.setPower(-sigmoid(degrees - (initAngle - getHeading())));
+            robot.backLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
+            robot.frontLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
 
             //setting right motors to go backward (negative power)
             robot.backRightMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
@@ -337,7 +337,14 @@ public class Auto_Methods extends LinearOpMode {
     public void liftDrop() {
         robot.rightLiftServo.setPower(0);
         robot.leftLiftServo.setPower(0);
-        sleep(2000);
+    }
+
+    public void liftOut(double power, int time) {
+        robot.leftExtensionServo.setPower(power);
+        robot.rightExtensionServo.setPower(power);
+        sleep(time);
+        robot.rightExtensionServo.setPower(0);
+        robot.leftExtensionServo.setPower(0);
     }
 
     public void liftDown(double power, int time) {
@@ -381,13 +388,15 @@ public class Auto_Methods extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> recognitions = tfod.getUpdatedRecognitions();
                     //telemetry.addData("# Object Detected", recognitions.size());
+                    int x = 0;
                     if (recognitions != null) {
                         if (recognitions.size() > 0) {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
                             for (Recognition recognition : recognitions) {
-                                telemetry.addData("Number of recognitions: ", recognitions.size());
+                                x++;
                                 if (recognition.getLabel().equals("Skystone")) {
+                                    telemetry.addData("count ", x);
                                     // finding if skystone is there or not
                                     telemetry.addData("Skystone: ", "Detected");
                                     skystone_detected = true;
@@ -399,15 +408,15 @@ public class Auto_Methods extends LinearOpMode {
                                     telemetry.addData("Estimated Angle", ObjectAngle);
                                     telemetry.addData("Position of Left side", LeftSide);
 
-                                    if (ObjectAngle >= -5) {
+                                    if (ObjectAngle >= 0) {
                                         telemetry.addData("Direction", "Right");
                                         return "Right";
-                                    } else if (ObjectAngle <= -10) {
-                                        telemetry.addData("Direction", "Left");
-                                        return "Left";
-                                    } else {
+                                    } else if (ObjectAngle <= 0) {
                                         telemetry.addData("Direction", "Center");
                                         return "Center";
+                                    } else {
+                                        telemetry.addData("Direction", "Left");
+                                        return "left";
                                     }
 
                                 }
@@ -448,12 +457,12 @@ public class Auto_Methods extends LinearOpMode {
                                     // showing user object angle
                                     telemetry.addData("Estimated Angle", ObjectAngle);
 
-                                    if (ObjectAngle > 2) {
+                                    if (ObjectAngle >= 0) {
                                         telemetry.addData("Direction", "Center");
-                                        return "Left";
-                                    } else if (ObjectAngle > 15) {
-                                        telemetry.addData("Direction", "Left");
                                         return "Center";
+                                    } else if (ObjectAngle <= 0) {
+                                        telemetry.addData("Direction", "Left");
+                                        return "Left";
                                     } else {
                                         return "Right";
                                     }
@@ -470,6 +479,7 @@ public class Auto_Methods extends LinearOpMode {
         return "ERROR";
     }
     //Going to skystone
+
     public void gotoSkystone(String color, String pos) {
 
         if (pos.equals("Left")) {
@@ -571,3 +581,4 @@ public class Auto_Methods extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
     }
 }
+

@@ -3,12 +3,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
  * created by ashwin jandhyala
  * 10/6/2019
  */
+@Disabled
 @Autonomous(name = "2019_FTC_Auto_Blocks_Red", group = "Tau")
 
 public class Auto_Mechanum_Blocks_Red extends Auto_Methods {

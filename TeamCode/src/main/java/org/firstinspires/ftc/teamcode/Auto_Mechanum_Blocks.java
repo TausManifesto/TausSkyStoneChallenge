@@ -3,16 +3,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
  * created by ashwin jandhyala
  * 10/6/2019
  */
-@Disabled
 //@Disabled
-@Autonomous(name = "2019_FTC_Auto_Blocks", group = "Tau")
+@Autonomous(name = "2019_FTC_Auto_Blocks_Test", group = "Tau")
 
 public class Auto_Mechanum_Blocks extends Auto_Methods {
 
@@ -23,20 +21,22 @@ public class Auto_Mechanum_Blocks extends Auto_Methods {
         //initializing robot
         initRobot();
 
+        while (opModeIsActive()) {
+            telemetry.addData("", getSkystonePosRed());
+            telemetry.update();
+        }
+
         //after start is pressed
 
-        String position = getSkystonePosRed();
+
+        //String position = getSkystonePosRed();
 
         //NO INTAKE
         //red -- blocks -- no intake
         //gotoSkystone2("Red", position);
-        //forward(.7,50);
+        //forward(.7,15);
         //backward(.7, 25);
 
-        while (opModeIsActive()) {
-            telemetry.addData("angle", getSkystonePosRed());
-            telemetry.update();
-        }
         //blue -- blocks -- no intake
         //gotoSkystone("Red", position);
         //forward(.7,50);

@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name = "2019_FTC_Auto_Foundation_Red", group = "Tau")
 
 public class Auto_Mechanum_Foundation_Red extends Auto_Methods {
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -23,16 +24,15 @@ public class Auto_Mechanum_Foundation_Red extends Auto_Methods {
 
         //red -- foundation
         liftUp(.5, 1000);
-        strafeLeft(.2, 12);
+        strafeLeft(.2, 15);
         backward(.3, 35);
         liftDrop();
         forward(.5, 35);
         right(10);
         liftUp(.5, 1000);
-        sleep(1000);
         strafeRight(.2, 35);
         liftDrop();
-        forward(.2, 5);
+        forward(.2, 7);
         strafeRight(.2, 20);
 
 
