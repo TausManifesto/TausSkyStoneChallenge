@@ -12,22 +12,20 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //@Disabled
 @Autonomous(name = "2019_FTC_Auto_Blocks_Test", group = "Tau")
 
-public class Auto_Mechanum_Blocks extends Auto_Methods {
+public class Auto_Mechanum_Blocks extends Vision_Test {
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //initializing robot
-        initRobot();
-
-        while (opModeIsActive()) {
-            telemetry.addData("", getSkystonePosRed());
-            telemetry.update();
-        }
-
         //after start is pressed
 
+        String position = SkystonePos("red");
+
+        telemetry.addData("pos ", position);
+        telemetry.update();
+
+        sleep(1000000);
 
         //String position = getSkystonePosRed();
 

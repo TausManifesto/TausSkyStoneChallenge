@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -47,6 +48,8 @@ public class Auto_Methods extends LinearOpMode {
     private Hardware robot = new Hardware();
 
     public void initRobot() {
+        robot.initTeleOpNOIMU(hardwareMap);
+
         //initializing imu
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -57,9 +60,6 @@ public class Auto_Methods extends LinearOpMode {
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
         imu.initialize(parameters);
-
-        robot.initTeleOpNOIMU(hardwareMap);
-
 
         telemetry.addLine("wait for gyro calibration"); //telling user to wait for gyro to be calibrated
         telemetry.update();
@@ -72,20 +72,21 @@ public class Auto_Methods extends LinearOpMode {
         telemetry.addData("gyro status :: ", imu.getCalibrationStatus().toString()); //returning gyro status (ready to start)
         telemetry.update();
 
-        initVuforia();
-        TargetHeightRatio = 0.8;
+
+        //initVuforia();
+        //TargetHeightRatio = 0.8;
 
         // Creating Tfod Instance
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
+        //if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+        //    initTfod();
+        //} else {
+        //    telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        //}
 
         // Activating ...
-        if (tfod != null) {
-            tfod.activate();
-        }
+        //if (tfod != null) {
+        //    tfod.activate();
+        //}
 
         waitForStart();
     }
@@ -93,14 +94,19 @@ public class Auto_Methods extends LinearOpMode {
     //defining methods for returning imu reading
 
     //getting angle based on initial angle
-    private double getHeading() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return angles.firstAngle; //right :: [0, -180] -- left :: [0, 180]
+    public double getHeading() {
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double heading = angles.firstAngle;
+
+        return heading; //right :: [0, -180] -- left :: [0, 180]
     }
 
     private double sigmoid(double error) {
         //return 1.4 / (1 + Math.pow(Math.E, -error)/20) - .7;
-        return .15;
+        if (error>20) {
+            return .125;
+        }
+        return .05;
     }
 
 
@@ -197,6 +203,7 @@ public class Auto_Methods extends LinearOpMode {
         //wait until angle turned is >= angle inputted
         while (initAngle - getHeading() <= degrees) {
 
+
             //setting left motors to go forward (positive power)
             robot.backLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
             robot.frontLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
@@ -228,12 +235,12 @@ public class Auto_Methods extends LinearOpMode {
         while (getHeading() - initAngle <= degrees) {
 
             //setting left motors to go forward (positive power)
-            robot.backLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
-            robot.frontLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
+            robot.backLeftMotor.setPower(-sigmoid(degrees - (getHeading()-initAngle)));
+            robot.frontLeftMotor.setPower(-sigmoid(degrees - (getHeading()-initAngle)));
 
             //setting right motors to go backward (negative power)
-            robot.backRightMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
-            robot.frontRightMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
+            robot.backRightMotor.setPower(sigmoid(degrees - (getHeading()-initAngle)));
+            robot.frontRightMotor.setPower(sigmoid(degrees - (getHeading()-initAngle)));
         }
 
         //setting motor value to 0 (stop)
@@ -326,6 +333,7 @@ public class Auto_Methods extends LinearOpMode {
 
     }
 
+    //moving vertical lift up a duration (seconds) with power [0,1]
     public void liftUp(double power, int time) {
         robot.leftLiftServo.setPower(power);
         robot.rightLiftServo.setPower(power);
@@ -334,16 +342,16 @@ public class Auto_Methods extends LinearOpMode {
         robot.leftLiftServo.setPower(.1);
     }
 
+    //dropping vertical lift by setting power to 0
     public void liftDrop() {
         robot.rightLiftServo.setPower(0);
         robot.leftLiftServo.setPower(0);
+        sleep(1000);
     }
 
     public void liftOut(double power, int time) {
         robot.leftExtensionServo.setPower(power);
-        robot.rightExtensionServo.setPower(power);
         sleep(time);
-        robot.rightExtensionServo.setPower(0);
         robot.leftExtensionServo.setPower(0);
     }
 
@@ -355,6 +363,35 @@ public class Auto_Methods extends LinearOpMode {
         robot.leftLiftServo.setPower(0);
     }
 
+    public void intake(){
+        robot.leftIntake.setPower(1);
+        robot.rightIntake.setPower(1);
+        robot.intake2.setPower(1);
+        robot.intake3.setPower(1);
+    }
+
+    public void outtake(){
+        robot.leftIntake.setPower(-1);
+        robot.rightIntake.setPower(-1);
+        robot.intake2.setPower(-1);
+        robot.intake3.setPower(-1);
+    }
+
+    public void stopIntake(){
+        robot.leftIntake.setPower(0);
+        robot.rightIntake.setPower(0);
+        robot.intake2.setPower(0);
+        robot.intake3.setPower(0);
+    }
+
+    public boolean isBlockIn(){
+        if (robot.blockSensor.getDistance(DistanceUnit.INCH)<2){
+            return true;
+        }
+        return  false;
+    }
+
+    /*
     //Initializing Vuforia
     public void initVuforia() {
 
@@ -576,7 +613,7 @@ public class Auto_Methods extends LinearOpMode {
             }
         }
     }
-
+*/
     @Override
     public void runOpMode() throws InterruptedException {
     }

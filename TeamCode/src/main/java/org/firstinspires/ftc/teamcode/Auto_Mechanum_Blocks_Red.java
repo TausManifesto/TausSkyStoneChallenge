@@ -10,29 +10,60 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * created by ashwin jandhyala
  * 10/6/2019
  */
-@Disabled
+
 @Autonomous(name = "2019_FTC_Auto_Blocks_Red", group = "Tau")
 
-public class Auto_Mechanum_Blocks_Red extends Auto_Methods {
+public class Auto_Mechanum_Blocks_Red extends Vision_Test {
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //initializing robot
-        initRobot();
+        String position = SkystonePos("red");
 
-        //after start is pressed
+        telemetry.addData("pos", position);
 
-        String position = getSkystonePosRed();
+        telemetry.update();
 
-        //NO INTAKE
+        right(90);
 
-        //red -- blocks -- no intake
-        forward(.7, 30);
-        gotoSkystone2("Red", position);
-        forward(.7, 50);
-        backward(.7, 25);
+        switch(position){
+            case "Right":
+                backward(.3, 12);
+                break;
+            case "Center":
+                backward(.3, 18);
+                break;
+            case "Left":
+                backward(.3, 26);
+                break;
+        }
+
+        strafeLeft(.3, 20);
+        outtake();
+        sleep(100);
+        intake();
+        forward(.3, 3);
+        sleep(1000);
+        stopIntake();
+        strafeRight(.7, 19);
+        switch(position){
+            case "Right":
+                forward(.7, 52);
+                break;
+            case "Center":
+                forward(.7, 58);
+                break;
+            case "Left":
+                forward(.7, 66);
+                break;
+        }
+        outtake();
+        sleep(1000);
+        stopIntake();
+        backward(.5, 5);
+
+
 
     }
 }

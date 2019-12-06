@@ -5,34 +5,63 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 
 /**
  * created by ashwin jandhyala
  * 10/6/2019
  */
-@Disabled
 @Autonomous(name = "2019_FTC_Auto_Blocks_Blue", group = "Tau")
 
-public class Auto_Mechanum_Blocks_Blue extends Auto_Methods {
+public class Auto_Mechanum_Blocks_Blue extends Vision_Test {
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //initializing robot
-        initRobot();
+        String position = SkystonePos("blue");
 
-        //after start is pressed
+        telemetry.addData("pos", position);
 
-        String position = getSkystonePosBlue();
+        telemetry.update();
 
-        //NO INTAKE
+        left(90);
 
-        //blue -- blocks -- no intake
-        forward(.7, 30);
-        gotoSkystone2("Blue", position);
-        forward(.7, 50);
-        backward(.7, 25);
+        switch(position){
+            case "Left":
+                backward(.3, 15);
+                break;
+            case "Center":
+                backward(.3, 21);
+                break;
+            case "Right":
+                backward(.3, 29);
+                break;
+        }
 
+        strafeRight(.3, 20);
+        outtake();
+        sleep(100);
+        intake();
+        forward(.3, 3);
+        sleep(1000);
+        stopIntake();
+        strafeLeft(.7, 19);
+        switch(position){
+            case "Left":
+                forward(.7, 52);
+                break;
+            case "Center":
+                forward(.7, 58);
+                break;
+            case "Right":
+                forward(.7, 66);
+                break;
+        }
+        outtake();
+        sleep(1000);
+        stopIntake();
+        backward(.5, 5);
     }
 }
