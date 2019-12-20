@@ -6,17 +6,13 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-
-import java.util.List;
 
 /**
  * created by ashwin jandhyala
@@ -102,7 +98,6 @@ public class Auto_Methods extends LinearOpMode {
     }
 
     private double sigmoid(double error) {
-        //return 1.4 / (1 + Math.pow(Math.E, -error)/20) - .7;
         if (error>20) {
             return .125;
         }
@@ -120,35 +115,39 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
-        robot.backLeftMotor.setTargetPosition(counts);
-        robot.backRightMotor.setTargetPosition(counts);
-        robot.frontRightMotor.setTargetPosition(counts);
-        robot.frontLeftMotor.setTargetPosition(counts);
+
 
         //setting all motors to go forward (positive)
 
-        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backLeftMotor.setPower(power);
-        robot.backRightMotor.setPower(power);
-        robot.frontRightMotor.setPower(power);
-        robot.frontLeftMotor.setPower(power);
+        double factor = 1;
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
-            idle();
+        //if (power>=.5) {
+        //    factor = 10;
+        //}
+
+        robot.backLeftMotor.setPower(power / factor);
+        robot.backRightMotor.setPower(power / factor);
+        robot.frontRightMotor.setPower(power / factor);
+        robot.frontLeftMotor.setPower(power / factor);
+
+        while (counts >= robot.backLeftMotor.getCurrentPosition()) {
+            if (factor > 1) {
+                factor -= .2;
+            }
+            robot.backLeftMotor.setPower(power / factor);
+            robot.backRightMotor.setPower(power / factor);
+            robot.frontRightMotor.setPower(power / factor);
+            robot.frontLeftMotor.setPower(power / factor);
         }
 
 
         //setting all motor powers to 0 (stopping)
         robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.backRightMotor.setPower(0);
-        //robot.frontRightMotor.setPower(0);
-        //robot.frontLeftMotor.setPower(0);
         robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        sleep(500);
     }
 
     //moving backward distance (m) with power [0, 1]
@@ -158,36 +157,39 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
-        robot.backLeftMotor.setTargetPosition(-counts);
-        robot.backRightMotor.setTargetPosition(-counts);
-        robot.frontRightMotor.setTargetPosition(-counts);
-        robot.frontLeftMotor.setTargetPosition(-counts);
+        int counts = -(int) ((distance / (4 * Math.PI)) * 1075);
 
         //setting all motors to go forward (positive)
 
-        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backLeftMotor.setPower(-power);
-        robot.backRightMotor.setPower(-power);
-        robot.frontRightMotor.setPower(-power);
-        robot.frontLeftMotor.setPower(-power);
+        double factor = -1;
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
-            idle();
+        //if (power>=.5) {
+        //    factor = -10;
+        //}
+
+        robot.backLeftMotor.setPower(power / factor);
+        robot.backRightMotor.setPower(power / factor);
+        robot.frontRightMotor.setPower(power / factor);
+        robot.frontLeftMotor.setPower(power / factor);
+
+        while (counts <= robot.backLeftMotor.getCurrentPosition()) {
+            if (factor < -1) {
+                factor += .2;
+            }
+            robot.backLeftMotor.setPower(power / factor);
+            robot.backRightMotor.setPower(power / factor);
+            robot.frontRightMotor.setPower(power / factor);
+            robot.frontLeftMotor.setPower(power / factor);
         }
 
 
         //setting all motor powers to 0 (stopping)
         robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.backRightMotor.setPower(0);
-        //robot.frontRightMotor.setPower(0);
-        //robot.frontLeftMotor.setPower(0);
         robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        sleep(500);
     }
 
     //turning right angle (deg) with power [0, 1]
@@ -234,102 +236,148 @@ public class Auto_Methods extends LinearOpMode {
         //wait until angle turned is >= angle inputted
         while (getHeading() - initAngle <= degrees) {
 
+            //setting right motors to go backward (negative power)
+            robot.backRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
+            robot.frontRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
+
             //setting left motors to go forward (positive power)
             robot.backLeftMotor.setPower(-sigmoid(degrees - (getHeading()-initAngle)));
             robot.frontLeftMotor.setPower(-sigmoid(degrees - (getHeading()-initAngle)));
-
-            //setting right motors to go backward (negative power)
-            robot.backRightMotor.setPower(sigmoid(degrees - (getHeading()-initAngle)));
-            robot.frontRightMotor.setPower(sigmoid(degrees - (getHeading()-initAngle)));
         }
 
         //setting motor value to 0 (stop)
-        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
     }
 
+    public void adjust(double degrees) {
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        double initAngle = getHeading(); //angle that the robot is at when it starts
+
+        //wait until angle turned is >= angle inputted
+        //wait until angle turned is >= angle inputted
+        while (getHeading() > degrees + 1 || getHeading() < degrees - 1) {
+            while (getHeading() >= degrees + 1) {
+
+                //setting left motors to go forward (positive power)
+                robot.backLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
+                robot.frontLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
+
+                //setting right motors to go backward (negative power)
+                robot.backRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
+                robot.frontRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
+            }
+            while (getHeading() <= degrees - 1) {
+                //setting right motors to go backward (negative power)
+                robot.backRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
+                robot.frontRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
+
+                //setting left motors to go forward (positive power)
+                robot.backLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
+                robot.frontLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
+            }
+        }
+
+        //setting motor value to 0 (stop)
+        robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
     //strafing left distance (m) with power [0, 1]
-    public void strafeLeft(double power, long distance) {
+    public void strafeLeft(double power, double distance) {
         robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         int counts = (int) ((distance / (4 * Math.PI)) * 1075);
-        robot.backLeftMotor.setTargetPosition(counts);
-        robot.backRightMotor.setTargetPosition(-counts);
-        robot.frontRightMotor.setTargetPosition(counts);
-        robot.frontLeftMotor.setTargetPosition(-counts);
 
         //setting all motors to go forward (positive)
 
-        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backLeftMotor.setPower(power);
-        robot.backRightMotor.setPower(-power);
-        robot.frontRightMotor.setPower(power);
-        robot.frontLeftMotor.setPower(-power);
+        double factor = 1;
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
-            idle();
+        //if (power>=.5) {
+        //    factor = 10;
+        //}
+
+        robot.backLeftMotor.setPower(power / factor);
+        robot.frontLeftMotor.setPower(-power / factor);
+        robot.frontRightMotor.setPower(power / factor);
+        robot.backRightMotor.setPower(-power / factor);
+
+        while (counts >= robot.backLeftMotor.getCurrentPosition()) {
+            if (factor > 1) {
+                factor -= .2;
+            }
+            robot.backLeftMotor.setPower(power / factor);
+            robot.frontLeftMotor.setPower(-power / factor);
+            robot.frontRightMotor.setPower(power / factor);
+            robot.backRightMotor.setPower(-power / factor);
         }
 
 
         //setting all motor powers to 0 (stopping)
         robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.backRightMotor.setPower(0);
-        //robot.frontRightMotor.setPower(0);
-        //robot.frontLeftMotor.setPower(0);
-        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        sleep(500);
 
     }
 
     //strafing right distance (m) with power [0, 1]
-    public void strafeRight(double power, long distance) {
+    public void strafeRight(double power, double distance) {
         robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
-        robot.backLeftMotor.setTargetPosition(-counts);
-        robot.backRightMotor.setTargetPosition(counts);
-        robot.frontRightMotor.setTargetPosition(-counts);
-        robot.frontLeftMotor.setTargetPosition(counts);
+        int counts = -(int) ((distance / (4 * Math.PI)) * 1075);
 
         //setting all motors to go forward (positive)
 
-        robot.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.backLeftMotor.setPower(-power);
-        robot.backRightMotor.setPower(power);
-        robot.frontRightMotor.setPower(-power);
-        robot.frontLeftMotor.setPower(power);
+        double factor = 1;
 
-        while (opModeIsActive() && robot.backLeftMotor.isBusy() && robot.backRightMotor.isBusy() && robot.frontRightMotor.isBusy() && robot.frontLeftMotor.isBusy()) {
-            idle();
+        //if (power>=.5) {
+        //    factor = 10;
+        //}
+
+        robot.backLeftMotor.setPower(-power / factor);
+        robot.frontLeftMotor.setPower(power / factor);
+        robot.frontRightMotor.setPower(-power / factor);
+        robot.backRightMotor.setPower(power / factor);
+
+
+        while (counts <= robot.backLeftMotor.getCurrentPosition()) {
+            if (factor > 1) {
+                factor -= .2;
+            }
+            robot.backLeftMotor.setPower(-power / factor);
+            robot.frontLeftMotor.setPower(power / factor);
+            robot.frontRightMotor.setPower(-power / factor);
+            robot.backRightMotor.setPower(power / factor);
         }
 
 
         //setting all motor powers to 0 (stopping)
         robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.backRightMotor.setPower(0);
-        //robot.frontRightMotor.setPower(0);
-        //robot.frontLeftMotor.setPower(0);
-        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        sleep(500);
 
     }
 
@@ -346,7 +394,7 @@ public class Auto_Methods extends LinearOpMode {
     public void liftDrop() {
         robot.rightLiftServo.setPower(0);
         robot.leftLiftServo.setPower(0);
-        sleep(1000);
+        sleep(2000);
     }
 
     public void liftOut(double power, int time) {
@@ -365,7 +413,7 @@ public class Auto_Methods extends LinearOpMode {
 
     public void intake(){
         robot.leftIntake.setPower(1);
-        robot.rightIntake.setPower(1);
+        robot.rightIntake.setPower(.5);
         robot.intake2.setPower(1);
         robot.intake3.setPower(1);
     }

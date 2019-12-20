@@ -48,6 +48,7 @@ public class Drive_Tau extends LinearOpMode {
     //private DigitalChannel leftLiftLimit = null;
     private DigitalChannel rightLiftLimit = null;
     private DistanceSensor blockSensor = null;
+    private DistanceSensor liftSensor = null;
     //private DigitalChannel leftExtensionLimit = null;
     private DigitalChannel rightExtensionLimit = null;
 
@@ -69,6 +70,7 @@ public class Drive_Tau extends LinearOpMode {
         //leftLiftLimit = hardwareMap.get(DigitalChannel.class, "left_lift_limit0");
         rightLiftLimit = hardwareMap.get(DigitalChannel.class, "right_lift_limit0");
         blockSensor = hardwareMap.get(DistanceSensor.class, "left_block_sensor");
+        liftSensor = hardwareMap.get(DistanceSensor.class, "left_height_sensor");
 
         //leftExtensionLimit = hardwareMap.get(TouchSensor.class, "leftExtensionLimit");
         rightExtensionLimit = hardwareMap.get(DigitalChannel.class, "right_extension_limit0");
@@ -148,6 +150,8 @@ public class Drive_Tau extends LinearOpMode {
             }
 
             telemetry.addLine("");
+
+            telemetry.addData("Height of lift ", liftSensor.getDistance(DistanceUnit.INCH));
 
             if (Xpressed == false){
                 telemetry.addLine("CLAW IS CLOSED");

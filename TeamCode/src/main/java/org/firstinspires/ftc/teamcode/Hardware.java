@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -145,8 +144,8 @@ public class Hardware {
         backRightMotor = hwMap.dcMotor.get("right_back");
         rightIntake = hwMap.dcMotor.get("right_intake");
         leftIntake = hwMap.dcMotor.get("left_intake");
-        intake2 = hwMap.crservo.get("intake_help_right");
-        intake3 = hwMap.crservo.get("intake_help_left");
+        intake3 = hwMap.crservo.get("intake_help_right");
+        intake2 = hwMap.crservo.get("intake_help_left");
         blockSensor = hwMap.get(DistanceSensor.class, "left_block_sensor");
 
 

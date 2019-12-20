@@ -19,21 +19,10 @@ public class test extends Auto_Methods {
 
         //initializing robot
         initRobot();
-
-        //after start is pressed
-
-        //blue -- foundation
-        liftUp(.5, 1000);
-        strafeRight(.2, 15);
-        backward(.3, 35);
-        liftDrop();
-        forward(.5, 35);
-        left(10);
-        liftUp(.5, 1000);
-        strafeLeft(.2, 35);
-        liftDrop();
-        forward(.2, 7);
-        strafeLeft(.2, 20);
+        forward(1, 24);
+        backward(1, 24);
+        strafeLeft(1, 24);
+        strafeRight(1, 24);
 
 
     }

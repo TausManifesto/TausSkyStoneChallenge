@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * 10/6/2019
  */
 //@Disabled
-@Autonomous(name = "Foundation_Red", group = "Tau")
+@Autonomous(name = "Foundation_Test", group = "Tau")
 
-public class Auto_Mechanum_Foundation_Red extends Auto_Methods {
+public class Auto_Mechanum_Foundation extends Auto_Methods {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,18 +20,18 @@ public class Auto_Mechanum_Foundation_Red extends Auto_Methods {
         //initializing robot
         initRobot();
 
-        //after start is pressed
+        //after start is pressed-
 
         //red -- foundation
         liftUp(.5, 1000);
-        strafeLeft(.2, 15);
         backward(.5, 35);
         liftDrop();
         forward(.5, 35);
+        right(90);
         liftUp(.5, 1000);
-        strafeRight(.2, 35);
+        backward(.2, 35);
         liftDrop();
-        strafeRight(.2, 20);
+        backward(.2, 20);
 
 
     }

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * 10/6/2019
  */
 //@Disabled
-@Autonomous(name = "2019_FTC_Auto_Foundation_Blue", group = "Tau")
+@Autonomous(name = "Foundation_Blue", group = "Tau")
 
 public class Auto_Mechanum_Foundation_Blue extends Auto_Methods {
 
@@ -25,14 +25,12 @@ public class Auto_Mechanum_Foundation_Blue extends Auto_Methods {
         //blue -- foundation
         liftUp(.5, 1000);
         strafeRight(.2, 15);
-        backward(.3, 35);
+        backward(.5, 35);
         liftDrop();
         forward(.5, 35);
-        left(10);
         liftUp(.5, 1000);
         strafeLeft(.2, 35);
         liftDrop();
-        forward(.2, 7);
         strafeLeft(.2, 20);
 
 

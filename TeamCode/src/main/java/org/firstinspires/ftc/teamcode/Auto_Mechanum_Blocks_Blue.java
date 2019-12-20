@@ -3,16 +3,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 /**
  * created by ashwin jandhyala
  * 10/6/2019
  */
-@Autonomous(name = "2019_FTC_Auto_Blocks_Blue", group = "Tau")
+@Autonomous(name = "Blocks_Blue", group = "Tau")
 
 public class Auto_Mechanum_Blocks_Blue extends Vision_Test {
 
@@ -33,10 +30,10 @@ public class Auto_Mechanum_Blocks_Blue extends Vision_Test {
                 backward(.3, 15);
                 break;
             case "Center":
-                backward(.3, 21);
+                backward(.3, 23);
                 break;
             case "Right":
-                backward(.3, 29);
+                backward(.3, 31);
                 break;
         }
 
@@ -44,24 +41,26 @@ public class Auto_Mechanum_Blocks_Blue extends Vision_Test {
         outtake();
         sleep(100);
         intake();
-        forward(.3, 3);
+        forward(.3, 6);
         sleep(1000);
         stopIntake();
-        strafeLeft(.7, 19);
+        strafeLeft(.7, 15);
+        right(4);
         switch(position){
             case "Left":
-                forward(.7, 52);
+                forward(.8, 53);
                 break;
             case "Center":
-                forward(.7, 58);
+                forward(.8, 59);
                 break;
             case "Right":
-                forward(.7, 66);
+                forward(.8, 67);
                 break;
         }
         outtake();
-        sleep(1000);
+        sleep(2000);
         stopIntake();
-        backward(.5, 5);
+        backward(.7, 15);
+        strafeRight(1, 2);
     }
 }
