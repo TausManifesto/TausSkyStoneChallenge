@@ -3,7 +3,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
@@ -11,10 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * 10/6/2019
  */
 
-@Disabled
-@Autonomous(name = "Blocks_Red", group = "Tau")
+@Autonomous(name = "Blocks_Red_3", group = "Tau")
 
-public class Auto_Mechanum_Blocks_Red extends Vision_Test {
+public class Auto_Mechanum_Blocks_Red_3 extends Vision_Test {
 
 
     @Override
@@ -26,43 +24,40 @@ public class Auto_Mechanum_Blocks_Red extends Vision_Test {
 
         telemetry.update();
 
-        right(90);
-
-        switch(position){
+        switch (position) {
             case "Right":
-                backward(.3, 10);
+                strafeRight(.4, 7);
                 break;
             case "Center":
-                backward(.3, 18);
+                strafeLeft(.4, 1);
                 break;
             case "Left":
-                backward(.3, 26);
+                strafeLeft(.4, 9);
                 break;
         }
-
-        strafeLeft(.3, 20);
         outtake();
-        sleep(100);
+        sleep(500);
         intake();
-        forward(.3, 5);
-        sleep(1000);
+        adjust(0);
+        forward(.4, 30);
+        adjust(0);
+        backward(.4, 30);
         stopIntake();
-        strafeRight(.7, 19.5);
-        switch(position){
+        adjust(0);
+        switch (position) {
             case "Right":
-                forward(.8, 51);
+                strafeRight(.4, 51);
                 break;
             case "Center":
-                forward(.8, 59);
+                strafeRight(.4, 59);
                 break;
             case "Left":
-                forward(.8, 67);
+                strafeRight(.4, 67);
                 break;
         }
         outtake();
         sleep(2000);
         stopIntake();
-        backward(.7, 15);
-        strafeLeft(1, 2);
+        strafeLeft(.7, 20);
     }
 }

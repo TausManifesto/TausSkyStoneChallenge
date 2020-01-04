@@ -3,13 +3,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
  * created by ashwin jandhyala
  * 10/6/2019
  */
-//@Disabled
+@Disabled
 @Autonomous(name = "Foundation_Red", group = "Tau")
 
 public class Auto_Mechanum_Foundation_Red extends Auto_Methods {

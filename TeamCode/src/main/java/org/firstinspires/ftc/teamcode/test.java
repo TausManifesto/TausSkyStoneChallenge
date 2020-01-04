@@ -19,10 +19,8 @@ public class test extends Auto_Methods {
 
         //initializing robot
         initRobot();
-        forward(1, 24);
-        backward(1, 24);
-        strafeLeft(1, 24);
-        strafeRight(1, 24);
+        sleep(5000);
+        adjust(0);
 
 
     }

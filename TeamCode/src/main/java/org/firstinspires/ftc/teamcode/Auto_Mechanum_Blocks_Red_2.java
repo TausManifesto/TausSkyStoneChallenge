@@ -3,13 +3,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
  * created by ashwin jandhyala
  * 10/6/2019
  */
-
+@Disabled
 @Autonomous(name = "Blocks_Red_2", group = "Tau")
 
 public class Auto_Mechanum_Blocks_Red_2 extends Vision_Test {
@@ -26,28 +27,28 @@ public class Auto_Mechanum_Blocks_Red_2 extends Vision_Test {
 
         switch (position) {
             case "Right":
-                strafeRight(.5, 7);
+                strafeRight(.7, 7);
                 break;
             case "Center":
-                strafeLeft(.5, 1);
+                strafeLeft(.7, 1);
                 break;
             case "Left":
-                strafeLeft(.5, 9);
+                strafeLeft(.7, 9);
                 break;
         }
         outtake();
-        sleep(100);
+        sleep(500);
         intake();
         //adjust(0);
         forward(.7, 30);
-        sleep(1000);
-        stopIntake();
+        sleep(100);
         //adjust(0);
-        backward(.7, 30);
+        backward(.7, 33);
+        stopIntake();
         //adjust(0);
         switch (position) {
             case "Right":
-                strafeRight(8, 51);
+                strafeRight(.7, 51);
                 break;
             case "Center":
                 strafeRight(.7, 59);
@@ -57,8 +58,9 @@ public class Auto_Mechanum_Blocks_Red_2 extends Vision_Test {
                 break;
         }
         outtake();
-        sleep(2000);
+        sleep(1000);
         stopIntake();
+        /*
         //adjust(0);
         switch (position) {
             case "Right":
@@ -68,16 +70,16 @@ public class Auto_Mechanum_Blocks_Red_2 extends Vision_Test {
                 strafeLeft(.7, 83);
                 break;
             case "Left":
-                strafeLeft(.7, 87);
+                strafeLeft(.7, 85);
                 break;
         }
-        //adjust(0);
+        adjust(0);
         intake();
-        forward(.7, 30);
+        forward(.7, 33);
         sleep(1000);
         stopIntake();
-        //adjust(0);
-        backward(.7, 30);
+        adjust(0);
+        backward(.7, 33);
         //adjust(0);
         switch (position) {
             case "Right":
@@ -95,5 +97,6 @@ public class Auto_Mechanum_Blocks_Red_2 extends Vision_Test {
         stopIntake();
         //adjust(0);
         strafeLeft(.7, 20);
+        */
     }
 }

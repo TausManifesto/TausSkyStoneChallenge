@@ -28,9 +28,14 @@ public class Drive_Tau extends LinearOpMode {
     boolean XStillPressed = false;
     boolean X1pressed = false;
     boolean X1StillPressed = false;
+    boolean Y2StillPressed = false;
+    boolean A2StillPressed = false;
 
     double turnFactor = 2;
     double driveFactor = 1;
+    int count = 0;
+    double target = 5;
+    boolean driver = true;
 
     ElapsedTime period = new ElapsedTime();
     BNO055IMU imu;
@@ -42,7 +47,6 @@ public class Drive_Tau extends LinearOpMode {
     private DcMotor rightIntake = null;
     private CRServo intake2 = null;
     private CRServo intake3 = null;
-    private double liftPower = 0;
     private double extensionPower = 0;
     private CRServo clawServo = null;
     //private DigitalChannel leftLiftLimit = null;
@@ -70,7 +74,7 @@ public class Drive_Tau extends LinearOpMode {
         //leftLiftLimit = hardwareMap.get(DigitalChannel.class, "left_lift_limit0");
         rightLiftLimit = hardwareMap.get(DigitalChannel.class, "right_lift_limit0");
         blockSensor = hardwareMap.get(DistanceSensor.class, "left_block_sensor");
-        liftSensor = hardwareMap.get(DistanceSensor.class, "left_height_sensor");
+        liftSensor = hardwareMap.get(DistanceSensor.class, "lift_height_sensor");
 
         //leftExtensionLimit = hardwareMap.get(TouchSensor.class, "leftExtensionLimit");
         rightExtensionLimit = hardwareMap.get(DigitalChannel.class, "right_extension_limit0");
@@ -91,7 +95,7 @@ public class Drive_Tau extends LinearOpMode {
 
         leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         rightIntake.setDirection(DcMotorSimple.Direction.FORWARD);
-        intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake3.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -143,17 +147,25 @@ public class Drive_Tau extends LinearOpMode {
 
             getHeading();
 
+            autoLift();
+
             telemetry.addLine("");
+            //telemetry.addData("up ",liftSensor.getDistance(DistanceUnit.INCH)<target && !driver);
+            //telemetry.addData("target ", target);
+            telemetry.addData("stack", count);
+            //telemetry.addData("driver ", driver);
 
             if (isBlockIn()) {
                 telemetry.addLine("BLOCK IS IN");
+                clawServo.setPower(.7);
             }
 
             telemetry.addLine("");
 
-            telemetry.addData("Height of lift ", liftSensor.getDistance(DistanceUnit.INCH));
-
-            if (Xpressed == false){
+            if (!Xpressed) {
+                clawServo.setPower(.7);
+                sleep(1000);
+                clawServo.setPower(.3);
                 telemetry.addLine("CLAW IS CLOSED");
             }
 
@@ -300,22 +312,26 @@ public class Drive_Tau extends LinearOpMode {
 
     public void lift() {
         if (gamepad2.left_bumper) {
-            liftPower = 0.7;
+            leftLiftServo.setPower(.7);
+            rightLiftServo.setPower(.7);
+            target = 5;
+            driver = true;
+            count = 0;
         }
         else if ((Math.abs(gamepad2.left_trigger) > .07) && !rightLiftLimit.getState()) {
-            liftPower = -0.1;
-
-        }
-        else if (!rightLiftLimit.getState()) {
-            liftPower = 0.15;
+            leftLiftServo.setPower(-.1);
+            rightLiftServo.setPower(-.1);
+            target = 5;
+            driver = true;
+            count = 0;
+        } else if (!rightLiftLimit.getState() && driver) {
+            leftLiftServo.setPower(.15);
+            rightLiftServo.setPower(.15);
             telemetry.addLine("LIFT IS UP");
+        } else if (driver) {
+            leftLiftServo.setPower(0);
+            rightLiftServo.setPower(0);
         }
-        else {
-            liftPower = 0;
-        }
-
-        leftLiftServo.setPower(liftPower);
-        rightLiftServo.setPower(liftPower);
 
     }
 
@@ -323,15 +339,15 @@ public class Drive_Tau extends LinearOpMode {
         if (gamepad1.left_trigger > .05) {
             rightIntake.setPower(1);
             leftIntake.setPower(.7);
-            intake2.setPower(1);
-            intake3.setPower(1);
+            intake2.setPower(.7);
+            intake3.setPower(.7);
             telemetry.addLine("INTAKING");
         }
         else if (gamepad1.right_trigger > .05) {
             rightIntake.setPower(-1);
             leftIntake.setPower(-1);
-            intake2.setPower(-1);
-            intake3.setPower(-1);
+            intake2.setPower(-.7);
+            intake3.setPower(-.7);
             telemetry.addLine("OUTTAKING");
 
         }
@@ -348,6 +364,51 @@ public class Drive_Tau extends LinearOpMode {
             return true;
         }
         return  false;
+    }
+
+    public void autoLift() {
+
+        if (gamepad2.y && !Y2StillPressed) {
+            if (target == 5) {
+                target += 2.5;
+            }
+            target += 4;
+            count += 1;
+            Y2StillPressed = true;
+            driver = false;
+        }
+        if (!gamepad2.y) {
+            Y2StillPressed = false;
+        }
+
+        if (gamepad2.a && !A2StillPressed) {
+            if (target != 5) {
+                target -= 4;
+                count -= 1;
+            }
+            A2StillPressed = true;
+            driver = false;
+        }
+        if (!gamepad2.a) {
+            A2StillPressed = false;
+        }
+
+        if (!driver) {
+            if (liftSensor.getDistance(DistanceUnit.INCH) < target) {
+                leftLiftServo.setPower(.7);
+                rightLiftServo.setPower(.7);
+            } else if (liftSensor.getDistance(DistanceUnit.INCH) > target + .5) {
+                leftLiftServo.setPower(.02);
+                rightLiftServo.setPower(.02);
+
+            } else if (rightLiftLimit.getState()) {
+                leftLiftServo.setPower(0);
+                rightLiftServo.setPower(0);
+            } else {
+                leftLiftServo.setPower(.1);
+                rightLiftServo.setPower(.1);
+            }
+        }
     }
 }
 

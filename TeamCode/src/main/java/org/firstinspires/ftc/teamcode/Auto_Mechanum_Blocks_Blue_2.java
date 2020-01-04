@@ -3,6 +3,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
@@ -10,7 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * 10/6/2019
  */
 
-@Autonomous(name = "Blocks_Red_2", group = "Tau")
+@Disabled
+@Autonomous(name = "Blocks_Blue_2", group = "Tau")
 
 public class Auto_Mechanum_Blocks_Blue_2 extends Vision_Test {
 
@@ -47,7 +49,7 @@ public class Auto_Mechanum_Blocks_Blue_2 extends Vision_Test {
         //adjust(0);
         switch (position) {
             case "Right":
-                strafeLeft(8, 51);
+                strafeLeft(.7, 51);
                 break;
             case "Center":
                 strafeLeft(.7, 59);

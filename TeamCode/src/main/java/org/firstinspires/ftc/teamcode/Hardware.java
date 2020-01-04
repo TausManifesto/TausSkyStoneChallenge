@@ -162,7 +162,7 @@ public class Hardware {
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
         leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         rightIntake.setDirection(DcMotorSimple.Direction.FORWARD);
-        intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake3.setDirection(DcMotorSimple.Direction.REVERSE);
 
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);

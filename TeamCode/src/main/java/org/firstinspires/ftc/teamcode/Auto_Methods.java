@@ -265,31 +265,34 @@ public class Auto_Methods extends LinearOpMode {
         //wait until angle turned is >= angle inputted
         //wait until angle turned is >= angle inputted
         while (getHeading() > degrees + 1 || getHeading() < degrees - 1) {
-            while (getHeading() >= degrees + 1) {
+            if (getHeading() >= degrees) {
+                while (getHeading() >= degrees) {
 
-                //setting left motors to go forward (positive power)
-                robot.backLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
-                robot.frontLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
+                    //setting left motors to go forward (positive power)
+                    robot.backLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
+                    robot.frontRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
+                    robot.backRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
+                    robot.frontLeftMotor.setPower(sigmoid(degrees - (initAngle - getHeading())));
 
-                //setting right motors to go backward (negative power)
-                robot.backRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
-                robot.frontRightMotor.setPower(-sigmoid(degrees - (initAngle - getHeading()))); //-
-            }
-            while (getHeading() <= degrees - 1) {
-                //setting right motors to go backward (negative power)
-                robot.backRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
-                robot.frontRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
+                    //setting right motors to go backward (negative power)
 
-                //setting left motors to go forward (positive power)
-                robot.backLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
-                robot.frontLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
+                }
+            } else {
+                while (getHeading() <= degrees) {
+                    //setting right motors to go backward (negative power)
+                    robot.backRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
+                    robot.frontLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
+                    robot.backLeftMotor.setPower(-sigmoid(degrees - (getHeading() - initAngle)));
+                    robot.frontRightMotor.setPower(sigmoid(degrees - (getHeading() - initAngle)));
+                    //setting left motors to go forward (positive power)
+                }
             }
         }
 
         //setting motor value to 0 (stop)
         robot.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
@@ -413,16 +416,16 @@ public class Auto_Methods extends LinearOpMode {
 
     public void intake(){
         robot.leftIntake.setPower(1);
-        robot.rightIntake.setPower(.5);
-        robot.intake2.setPower(1);
-        robot.intake3.setPower(1);
+        robot.rightIntake.setPower(.7);
+        robot.intake2.setPower(.5);
+        robot.intake3.setPower(.7);
     }
 
     public void outtake(){
         robot.leftIntake.setPower(-1);
         robot.rightIntake.setPower(-1);
-        robot.intake2.setPower(-1);
-        robot.intake3.setPower(-1);
+        robot.intake2.setPower(-.7);
+        robot.intake3.setPower(-.7);
     }
 
     public void stopIntake(){
