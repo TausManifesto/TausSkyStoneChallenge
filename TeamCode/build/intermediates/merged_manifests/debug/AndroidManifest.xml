@@ -7,8 +7,8 @@
 <!-- The package name here determines the package for your R class and your BuildConfig class -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.qualcomm.ftcrobotcontroller"
-    android:versionCode="34"
-    android:versionName="5.2" >
+    android:versionCode="35"
+    android:versionName="5.3" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -361,24 +361,9 @@
             android:label="@string/inspection_activity" >
         </activity>
         <activity
-            android:name="com.google.blocks.ftcrobotcontroller.ProgrammingModeActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/programming_mode_activity" >
-        </activity>
-        <activity
             android:name="org.firstinspires.ftc.ftccommon.internal.ProgramAndManageActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/program_and_manage_activity" >
-        </activity>
-        <activity
-            android:name="com.google.blocks.ftcdriverstation.RemoteProgrammingModeActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/programming_mode_activity" >
-        </activity>
-        <activity
-            android:name="com.google.blocks.ftcrobotcontroller.BlocksActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/blocks_activity" >
         </activity>
     </application>
 

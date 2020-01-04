@@ -18,13 +18,11 @@
     <string name="inspection_mode_menu_item">Self Inspect</string>
     <string name="packageName">@string/packageNameRobotController</string>
     <string name="program_and_manage_menu_item">Program &amp; Manage</string>
-    <string name="programming_mode_menu_item">Programming Mode</string>
     <string name="restart_robot_menu_item">Restart Robot</string>
     <string name="settings_menu_item">Settings</string>
-    <string name="toastConfigureRobotBeforeProgrammingMode">You must Configure Robot before starting Programming Mode.</string>
     <string name="toastRestartingRobot">Restarting Robot</string>
     <string name="toastWifiConfigurationComplete">Configuration Complete</string>
-    <string name="toastWifiUpBeforeProgrammingMode">The Robot Controller must be fully up and running before starting Programming Mode.  Is Wifi turned on in settings?</string>
+    <string name="toastWifiUpBeforeProgrammingMode">The Robot Controller must be fully up and running before entering Program and Manage Mode.</string>
     <style name="AppThemeBlueRC" parent="AppTheme.Blue">
     </style>
     <style name="AppThemeGreenRC" parent="AppTheme.Green">

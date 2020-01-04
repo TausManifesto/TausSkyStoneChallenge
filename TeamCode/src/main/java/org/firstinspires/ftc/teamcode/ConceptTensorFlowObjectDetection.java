@@ -25,7 +25,9 @@ import java.util.List;
  */
 @Disabled
 @Autonomous(name = "ConceptTensorFlowObjectDetection", group = "Concept")
-
+/**
+ * Created by Charles Sun 10/18/2019.
+ */
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     // Declaring Labels and ObjDetect Models
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
@@ -74,7 +76,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                     // the last time that call was made.
                     List<Recognition> recognitions = tfod.getUpdatedRecognitions();
                     if (recognitions != null) {
-                        if (recognitions.size() > 0) {
+                        if (recognitions.size() == 3) {
                             telemetry.addData("# Object Detected", recognitions.size());
                             // step through the list of recognitions and display boundary info.
                             for (int i = 0; i < recognitions.size(); i++) {

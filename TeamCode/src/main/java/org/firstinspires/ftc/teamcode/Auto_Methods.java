@@ -349,16 +349,20 @@ public class Auto_Methods extends LinearOpMode {
                     if (recognitions != null) {
                         if (recognitions.size() > 0) {
                             telemetry.addData("# Object Detected", recognitions.size());
+                            telemetry.update();
+                            sleep(5000);
                             // step through the list of recognitions and display boundary info.
                             for (int i = 0; i < recognitions.size(); i++) {
                                 if (recognitions.get(i).getLabel() == "Skystone") {
                                     // finding if skystone is there or not
                                     telemetry.addData("Skystone: ", "Detected");
+                                    telemetry.update();
                                     skystone_detected = true;
                                     // getting provided estimated angle
                                     ObjectAngle = recognitions.get(i).estimateAngleToObject(AngleUnit.DEGREES);
                                     // showing user object angle
                                     telemetry.addData("Estimated Angle", ObjectAngle);
+                                    telemetry.update();
                                     if (ObjectAngle > 7) {
                                         telemetry.addData("Direction", "Right");
                                         pos = "Right";

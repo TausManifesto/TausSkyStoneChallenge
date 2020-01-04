@@ -21,12 +21,27 @@ public class Teleop extends OpMode {
     private double frontrightPOWER = 0;
     private double backleftPOWER = 0;
     private double backrightPOWER = 0;
+
+
+    private double leftLiftPower = 0;
+    private double rightLiftPower = 0;
+    private double leftExtensionPower = 0;
+    private double rightExtensionPower = 0;
+
+
+    private double leftIntakePower = 0;
+    private double rightIntakePower = 0;
+
     private double maxPOWER = 1;
+
     private final double triggerConstant = 0.75;
 
     private double leftGP1Y = 0;
     private double leftGP1X = 0;
     private double rightGP1X = 0;
+
+    private double leftGP2X = 0;
+    private double rightGP2Y = 0;
 
 
     @Override
@@ -56,8 +71,10 @@ public class Teleop extends OpMode {
 
         leftGP1X = gamepad1.left_stick_x;
         leftGP1Y = -gamepad1.left_stick_y;
-
         rightGP1X = gamepad1.right_stick_x;
+
+        leftGP2X = gamepad2.left_stick_x;
+        rightGP2Y = -gamepad2.right_stick_y;
 
 
 
@@ -65,6 +82,12 @@ public class Teleop extends OpMode {
             leftGP1Y = 0;
         }
         if (Math.abs(leftGP1X) < 0.05) {
+            leftGP1X = 0;
+        }
+        if (Math.abs(leftGP2X) < 0.05) {
+            leftGP1Y = 0;
+        }
+        if (Math.abs(rightGP2Y) < 0.05) {
             leftGP1X = 0;
         }
 
@@ -114,6 +137,19 @@ public class Teleop extends OpMode {
         robot.frontRightMotor.setPower(frontrightPOWER);
         robot.backLeftMotor.setPower(backleftPOWER);
         robot.backRightMotor.setPower(backrightPOWER);
+
+
+        if(leftGP2X > 0.05){
+            leftExtensionPower = leftGP2X;
+            rightExtensionPower = -leftGP2X;
+        }
+        if(rightGP2Y > 0.05){
+            leftLiftPower = rightGP2Y;
+            rightLiftPower = -rightGP2Y;
+
+        }
+
+
 
 
 
