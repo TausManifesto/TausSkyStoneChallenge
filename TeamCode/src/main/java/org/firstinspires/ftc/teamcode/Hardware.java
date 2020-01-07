@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -26,9 +27,9 @@ public class Hardware {
     public DcMotor rightIntake = null;
     public CRServo intake2 = null;
     public CRServo intake3 = null;
-    public CRServo clawServo = null;
-    public CRServo leftLiftServo = null;
-    public CRServo rightLiftServo = null;
+    public Servo clawServo = null;
+    public DcMotor leftLiftMotor = null;
+    public DcMotor rightLiftMotor = null;
     public CRServo leftExtensionServo = null;
     public DigitalChannel rightLimitSwitch;
     public DigitalChannel leftLimitSwitch;
@@ -119,14 +120,14 @@ public class Hardware {
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define Servos
-        leftLiftServo = hwMap.crservo.get("left_lift");
-        rightLiftServo = hwMap.crservo.get("right_lift");
+        leftLiftMotor = hwMap.dcMotor.get("left_lift");
+        rightLiftMotor = hwMap.dcMotor.get("right_lift");
 
-        leftLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightLiftServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftLiftServo.setPower(0);
-        rightLiftServo.setPower(0);
+        leftLiftMotor.setPower(0);
+        rightLiftMotor.setPower(0);
 
     }
 
@@ -187,17 +188,17 @@ public class Hardware {
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Define Servos
-        leftLiftServo = hwMap.crservo.get("left_lift");
-        rightLiftServo = hwMap.crservo.get("right_lift");
+        leftLiftMotor = hwMap.dcMotor.get("left_lift");
+        rightLiftMotor = hwMap.dcMotor.get("right_lift");
         leftExtensionServo = hwMap.crservo.get("left_extension");
-        clawServo = hwMap.crservo.get("claw_servo");
+        clawServo = hwMap.servo.get("claw_servo");
 
-        leftLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightLiftServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftExtensionServo.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftLiftServo.setPower(0);
-        rightLiftServo.setPower(0);
+        leftLiftMotor.setPower(0);
+        rightLiftMotor.setPower(0);
         leftExtensionServo.setPower(0);
 
 

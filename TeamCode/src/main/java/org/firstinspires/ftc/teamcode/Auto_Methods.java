@@ -386,18 +386,22 @@ public class Auto_Methods extends LinearOpMode {
 
     //moving vertical lift up a duration (seconds) with power [0,1]
     public void liftUp(double power, int time) {
-        robot.leftLiftServo.setPower(power);
-        robot.rightLiftServo.setPower(power);
+        robot.leftLiftMotor.setPower(power);
+        robot.rightLiftMotor.setPower(power);
         sleep(time);
-        robot.rightLiftServo.setPower(.1);
-        robot.leftLiftServo.setPower(.1);
+        robot.rightLiftMotor.setPower(.1);
+        robot.leftLiftMotor.setPower(.1);
     }
 
     //dropping vertical lift by setting power to 0
     public void liftDrop() {
-        robot.rightLiftServo.setPower(0);
-        robot.leftLiftServo.setPower(0);
-        sleep(2000);
+        robot.rightLiftMotor.setPower(-.1);
+        robot.leftLiftMotor.setPower(-.1);
+        while (!robot.rightLimitSwitch.getState()) {
+
+        }
+        robot.rightLiftMotor.setPower(0);
+        robot.leftLiftMotor.setPower(0);
     }
 
     public void liftOut(double power, int time) {
@@ -407,17 +411,24 @@ public class Auto_Methods extends LinearOpMode {
     }
 
     public void liftDown(double power, int time) {
-        robot.leftLiftServo.setPower(-power);
-        robot.rightLiftServo.setPower(-power);
+        robot.leftLiftMotor.setPower(-power);
+        robot.rightLiftMotor.setPower(-power);
         sleep(time);
-        robot.rightLiftServo.setPower(0);
-        robot.leftLiftServo.setPower(0);
+        robot.rightLiftMotor.setPower(0);
+        robot.leftLiftMotor.setPower(0);
     }
 
     public void intake(){
         robot.leftIntake.setPower(1);
-        robot.rightIntake.setPower(.7);
-        robot.intake2.setPower(.5);
+        robot.rightIntake.setPower(.75);
+        robot.intake2.setPower(.7);
+        robot.intake3.setPower(.7);
+    }
+
+    public void intake2() {
+        robot.leftIntake.setPower(1);
+        robot.rightIntake.setPower(1);
+        robot.intake2.setPower(.7);
         robot.intake3.setPower(.7);
     }
 

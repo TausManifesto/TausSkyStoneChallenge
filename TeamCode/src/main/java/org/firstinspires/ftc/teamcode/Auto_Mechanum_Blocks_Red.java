@@ -3,7 +3,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 /**
@@ -11,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * 10/6/2019
  */
 
-@Disabled
 @Autonomous(name = "Blocks_Red", group = "Tau")
 
 public class Auto_Mechanum_Blocks_Red extends Vision_Test {

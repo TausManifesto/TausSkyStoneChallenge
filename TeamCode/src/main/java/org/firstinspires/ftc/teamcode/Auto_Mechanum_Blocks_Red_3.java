@@ -26,33 +26,33 @@ public class Auto_Mechanum_Blocks_Red_3 extends Vision_Test {
 
         switch (position) {
             case "Right":
-                strafeRight(.4, 7);
+                strafeRight(.5, 7);
                 break;
             case "Center":
-                strafeLeft(.4, 1);
+                strafeLeft(.5, 1);
                 break;
             case "Left":
-                strafeLeft(.4, 9);
+                strafeLeft(.5, 9);
                 break;
         }
         outtake();
         sleep(500);
         intake();
+        forward(.5, 30);
         adjust(0);
-        forward(.4, 30);
-        adjust(0);
-        backward(.4, 30);
+        intake2();
+        backward(.5, 30);
         stopIntake();
         adjust(0);
         switch (position) {
             case "Right":
-                strafeRight(.4, 51);
+                strafeRight(.5, 51);
                 break;
             case "Center":
-                strafeRight(.4, 59);
+                strafeRight(.5, 59);
                 break;
             case "Left":
-                strafeRight(.4, 67);
+                strafeRight(.5, 67);
                 break;
         }
         outtake();
