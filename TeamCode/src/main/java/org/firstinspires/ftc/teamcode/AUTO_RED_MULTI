@@ -56,7 +56,7 @@ public class AUTO_RED_MULTI extends Vision_Test {
         isBlockIn();
         stopIntake();
           liftUp(.7, 2000);
-          (.7,4000);
+          liftOut(.7,4000);
           clawOpen();
           liftIn(.7,2500);
           liftDrop();
