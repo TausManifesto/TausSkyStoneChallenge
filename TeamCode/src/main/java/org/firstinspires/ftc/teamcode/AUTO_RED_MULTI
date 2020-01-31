@@ -1,0 +1,73 @@
+//code for the autonomous portion of the Skystone challenge
+
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+
+/**
+ * created by ashwin jandhyala
+ * 10/6/2019
+ */
+
+@Autonomous(name = "Multi_Red", group = "Tau")
+
+public class AUTO_RED_MULTI extends Vision_Test {
+
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+        String position = SkystonePos("red");
+
+        telemetry.addData("pos", position);
+
+        telemetry.update();
+
+        switch (position) {
+            case "Right":
+                strafeRight(0.7, 7);
+                break;
+            case "Center":
+                strafeLeft(0.7, 1);
+                break;
+            case "Left":
+                strafeLeft(0.7, 9);
+                break;
+        }
+        outtake();
+        sleep(500);
+        intake();
+        forward(0.7, 30);
+        intake2();
+        backward(0.7, 30);
+        switch (position) {
+            case "Right":
+                strafeRight(0.7, 73);
+                break;
+            case "Center":
+                strafeRight(0.7, 80);
+                break;
+            case "Left":
+                strafeRight(0.7,87);
+                break;
+        }
+            right(180);
+        isBlockIn();
+        stopIntake();
+          liftUp(.7, 2000);
+          (.7,4000);
+          clawOpen();
+          liftIn(.7,2500);
+          liftDrop();
+          forward(0.7,8);
+          strafeRight(0.7,22);
+
+
+//        backward(0.7, 20);
+//        strafeLeft(0.7, 24);
+
+
+
+    }
+}
