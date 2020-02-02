@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * 10/6/2019
  */
 
-@Autonomous(name = "Blocks_Red_3", group = "Tau")
+@Autonomous(name = "Blocks_Red", group = "Tau")
 
 public class Auto_Mechanum_Blocks_Red_3 extends Vision_Test {
 
@@ -46,18 +46,18 @@ public class Auto_Mechanum_Blocks_Red_3 extends Vision_Test {
         adjust(0);
         switch (position) {
             case "Right":
-                strafeRight(.5, 51);
+                strafeRight(.5, 55);
                 break;
             case "Center":
-                strafeRight(.5, 59);
+                strafeRight(.5, 63);
                 break;
             case "Left":
-                strafeRight(.5, 67);
+                strafeRight(.5, 71);
                 break;
         }
         outtake();
         sleep(2000);
         stopIntake();
-        strafeLeft(.7, 20);
+        strafeLeft(.7, 30);
     }
 }

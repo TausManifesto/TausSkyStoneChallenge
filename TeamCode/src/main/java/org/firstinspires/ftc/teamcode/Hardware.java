@@ -31,6 +31,7 @@ public class Hardware {
     public DcMotor leftLiftMotor = null;
     public DcMotor rightLiftMotor = null;
     public CRServo leftExtensionServo = null;
+    public CRServo rightExtensionServo = null;
     public DigitalChannel rightLimitSwitch;
     public DigitalChannel leftLimitSwitch;
     public DistanceSensor blockSensor = null;
@@ -191,11 +192,13 @@ public class Hardware {
         leftLiftMotor = hwMap.dcMotor.get("left_lift");
         rightLiftMotor = hwMap.dcMotor.get("right_lift");
         leftExtensionServo = hwMap.crservo.get("left_extension");
+        rightExtensionServo = hwMap.crservo.get("right_extension");
         clawServo = hwMap.servo.get("claw_servo");
 
         leftLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftExtensionServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightExtensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftLiftMotor.setPower(0);
         rightLiftMotor.setPower(0);

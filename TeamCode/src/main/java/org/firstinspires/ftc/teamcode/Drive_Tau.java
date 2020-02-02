@@ -24,6 +24,7 @@ public class Drive_Tau extends LinearOpMode {
     public DcMotor leftLiftMotor = null;
     public DcMotor rightLiftMotor = null;
     public CRServo leftExtensionServo = null;
+    public CRServo rightExtensionServo = null;
     double reset_angle = 0;
     boolean Xpressed = true;
     boolean XStillPressed = false;
@@ -71,6 +72,7 @@ public class Drive_Tau extends LinearOpMode {
         leftLiftMotor = hardwareMap.dcMotor.get("left_lift");
         rightLiftMotor = hardwareMap.dcMotor.get("right_lift");
         leftExtensionServo = hardwareMap.crservo.get("left_extension");
+        rightExtensionServo = hardwareMap.crservo.get("right_extension");
         clawServo = hardwareMap.servo.get("claw_servo");
         //leftLiftLimit = hardwareMap.get(DigitalChannel.class, "left_lift_limit0");
         rightLiftLimit = hardwareMap.get(DigitalChannel.class, "right_lift_limit0");
@@ -90,7 +92,7 @@ public class Drive_Tau extends LinearOpMode {
         front_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right_wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftExtensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightExtensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
         leftLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightLiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -159,10 +161,10 @@ public class Drive_Tau extends LinearOpMode {
 
             telemetry.addData("position", clawServo.getPosition());
 
-            if (isBlockIn()) {
-                telemetry.addLine("BLOCK IS IN");
+            //if (isBlockIn()) {
+            //    telemetry.addLine("BLOCK IS IN");
                 //    clawServo.setPower(.7);
-            }
+            //}
 
             telemetry.addLine("");
 
@@ -275,7 +277,7 @@ public class Drive_Tau extends LinearOpMode {
 
         if (gamepad2.x && !XStillPressed) {
             if (!Xpressed) {
-                clawServo.setPosition(0); //-.2 open
+                clawServo.setPosition(.07); //-.2 open
 
                 Xpressed = true;
             }
@@ -306,6 +308,7 @@ public class Drive_Tau extends LinearOpMode {
             extensionPower = 0;
         }
         leftExtensionServo.setPower(extensionPower);
+        rightExtensionServo.setPower(extensionPower);
 
     }
 
@@ -394,8 +397,8 @@ public class Drive_Tau extends LinearOpMode {
 
         if (!driver) {
             if (liftSensor.getDistance(DistanceUnit.INCH) < target) {
-                leftLiftMotor.setPower(.3);
-                rightLiftMotor.setPower(.3);
+                leftLiftMotor.setPower(1);
+                rightLiftMotor.setPower(1);
             } else if (liftSensor.getDistance(DistanceUnit.INCH) > target + .5) {
                 leftLiftMotor.setPower(.02);
                 rightLiftMotor.setPower(.02);
@@ -404,10 +407,14 @@ public class Drive_Tau extends LinearOpMode {
                 leftLiftMotor.setPower(0);
                 rightLiftMotor.setPower(0);
             } else {
-                leftLiftMotor.setPower(.1);
-                rightLiftMotor.setPower(.1);
+                leftLiftMotor.setPower(.02);
+                rightLiftMotor.setPower(.02);
             }
         }
+    }
+
+    public void autoExtend() {
+
     }
 }
 

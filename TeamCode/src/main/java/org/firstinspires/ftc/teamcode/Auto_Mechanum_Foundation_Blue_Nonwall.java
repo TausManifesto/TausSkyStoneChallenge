@@ -31,8 +31,7 @@ public class Auto_Mechanum_Foundation_Blue_Nonwall extends Auto_Methods {
         strafeLeft(.5,6);
         left(90);
         liftUp(.5, 1000);
-        backward(.5, 13);
-        forward(.5,15);
+        forward(.5, 3);
         liftDrop();
         forward(.5,25);
 

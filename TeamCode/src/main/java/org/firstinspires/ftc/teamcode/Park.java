@@ -9,21 +9,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  * created by ashwin jandhyala
  * 10/6/2019
  */
-//@Disabled
-@Autonomous(name = "test", group = "Tau")
+@Autonomous(name = "park", group = "Tau")
 
-public class test extends Auto_Methods {
+public class Park extends Auto_Methods {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         //initializing robot
         initRobot();
-        right(180);
-        sleep(10000);
-        right(180);
-        //sleep(1000);
-        //left(180);
+
+        //after start is pressed
+
+        strafeRight(.2, 10);
 
 
     }

@@ -98,10 +98,10 @@ public class Auto_Methods extends LinearOpMode {
     }
 
     private double sigmoid(double error) {
-        if (error>20) {
-            return .125;
+        if (error < 40) {
+            return (error / (40 / .3)) + .05;
         }
-        return .05;
+        return .3;
     }
 
 
@@ -121,9 +121,9 @@ public class Auto_Methods extends LinearOpMode {
 
         double factor = 1;
 
-        //if (power>=.5) {
-        //    factor = 10;
-        //}
+        if (power >= .5) {
+            factor = 10;
+        }
 
         robot.backLeftMotor.setPower(power / factor);
         robot.backRightMotor.setPower(power / factor);
@@ -163,9 +163,9 @@ public class Auto_Methods extends LinearOpMode {
 
         double factor = -1;
 
-        //if (power>=.5) {
-        //    factor = -10;
-        //}
+        if (power >= .5) {
+            factor = -10;
+        }
 
         robot.backLeftMotor.setPower(power / factor);
         robot.backRightMotor.setPower(power / factor);
@@ -309,9 +309,9 @@ public class Auto_Methods extends LinearOpMode {
 
         double factor = 1;
 
-        //if (power>=.5) {
-        //    factor = 10;
-        //}
+        if (power >= .5) {
+            factor = 10;
+        }
 
         robot.backLeftMotor.setPower(power / factor);
         robot.frontLeftMotor.setPower(-power / factor);
@@ -352,9 +352,9 @@ public class Auto_Methods extends LinearOpMode {
 
         double factor = 1;
 
-        //if (power>=.5) {
-        //    factor = 10;
-        //}
+        if (power >= .5) {
+            factor = 10;
+        }
 
         robot.backLeftMotor.setPower(-power / factor);
         robot.frontLeftMotor.setPower(power / factor);
@@ -406,6 +406,14 @@ public class Auto_Methods extends LinearOpMode {
 
     public void liftOut(double power, int time) {
         robot.leftExtensionServo.setPower(power);
+        robot.rightExtensionServo.setPower(-power);
+        sleep(time);
+        robot.leftExtensionServo.setPower(.1);
+    }
+
+    public void liftIn(double power, int time) {
+        robot.leftExtensionServo.setPower(-power);
+        robot.rightExtensionServo.setPower(power);
         sleep(time);
         robot.leftExtensionServo.setPower(0);
     }
@@ -446,11 +454,15 @@ public class Auto_Methods extends LinearOpMode {
         robot.intake3.setPower(0);
     }
 
-    public boolean isBlockIn(){
+    public void clawOpen() {
+        robot.clawServo.setPosition(0);
+    }
+
+    public void isBlockIn() {
         if (robot.blockSensor.getDistance(DistanceUnit.INCH)<2){
-            return true;
+            robot.clawServo.setPosition(.5);
         }
-        return  false;
+        robot.clawServo.setPosition(0);
     }
 
     /*

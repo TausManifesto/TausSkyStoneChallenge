@@ -1,19 +1,14 @@
+
 //code for the autonomous portion of the Skystone challenge
 
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
-/**
- * created by ashwin jandhyala
- * 10/6/2019
- */
-@Disabled
-@Autonomous(name = "Blocks_Red", group = "Tau")
+@Autonomous(name = "Stack_Vertical_Red_3_Nonwall", group = "Tau")
 
-public class Auto_Mechanum_Blocks_Red extends Vision_Test {
+public class Auto_Mechanum_Blocks_Red_3_Nonwall_AA extends Vision_Test {
 
 
     @Override
@@ -25,43 +20,44 @@ public class Auto_Mechanum_Blocks_Red extends Vision_Test {
 
         telemetry.update();
 
-        right(90);
-
-        switch(position){
+        switch (position) {
             case "Right":
-                backward(.3, 10);
+                strafeRight(.4, 7);
                 break;
             case "Center":
-                backward(.3, 18);
+                strafeLeft(.4, 1);
                 break;
             case "Left":
-                backward(.3, 26);
+                strafeLeft(.4, 9);
                 break;
         }
 
-        strafeLeft(.3, 20);
+
         outtake();
-        sleep(100);
+        sleep(500);
         intake();
-        forward(.3, 5);
-        sleep(1000);
+        forward(.4, 30);
+        backward(.7, 30);
         stopIntake();
-        strafeRight(.7, 19.5);
-        switch(position){
+        switch (position) {
             case "Right":
-                forward(.8, 51);
+                strafeRight(.7, 51);
                 break;
             case "Center":
-                forward(.8, 59);
+                strafeRight(.7, 59);
                 break;
             case "Left":
-                forward(.8, 67);
+                strafeRight(.7, 67);
                 break;
         }
+        right(90);
+        forward(1, 4.5);
+        strafeRight(1, 3);
         outtake();
         sleep(2000);
         stopIntake();
-        backward(.7, 15);
-        strafeLeft(1, 2);
+        backward(0.8, 19.5);
+
+
     }
 }

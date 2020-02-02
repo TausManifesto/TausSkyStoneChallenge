@@ -1,19 +1,12 @@
-//code for the autonomous portion of the Skystone challenge
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
-/**
- * created by ashwin jandhyala
- * 10/6/2019
- */
+@Autonomous(name = "Stack_Horizontal_Blue_3", group = "Tau")
 
-@Autonomous(name = "Blocks_Blue", group = "Tau")
 
-public class Auto_Mechanum_Blocks_Blue_3 extends Vision_Test {
-
+public class Auto_Mechanum_Stack_Blue_Horizontal_3_AA extends Vision_Test {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,38 +19,40 @@ public class Auto_Mechanum_Blocks_Blue_3 extends Vision_Test {
 
         switch (position) {
             case "Left":
-                strafeRight(.5, 2);
+                strafeLeft(.5, 15);
                 break;
             case "Center":
-                strafeRight(.5, 10);
+                strafeLeft(.5, 23);
                 break;
             case "Right":
-                strafeRight(.5, 18);
+                strafeLeft(.5, 31);
                 break;
         }
         outtake();
         sleep(100);
         intake();
         forward(.5, 30);
-        adjust(0);
         intake2();
-        backward(.5, 30);
+        backward(.7, 30);
         stopIntake();
-        adjust(0);
         switch (position) {
-            case "Left":
-                strafeLeft(.5, 55);
+            case "Right":
+                strafeLeft(.5, 51);
                 break;
             case "Center":
-                strafeLeft(.5, 63);
+                strafeLeft(.5, 59);
                 break;
-            case "Right":
-                strafeLeft(.5, 71);
+            case "Left":
+                strafeLeft(.5, 67);
                 break;
         }
+        forward(1, 10);
+        strafeRight(1, 7.5);
         outtake();
         sleep(2000);
         stopIntake();
-        strafeRight(.7, 30);
+        backward(1, 22);
     }
+
+
 }

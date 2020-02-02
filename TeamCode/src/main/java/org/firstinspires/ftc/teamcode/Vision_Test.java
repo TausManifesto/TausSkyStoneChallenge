@@ -318,7 +318,7 @@ public class Vision_Test extends Auto_Methods {
         //waitForStart();
         initRobot();
 
-        forward(.2, 19.5);
+        forward(.25, 19.5);
 
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
