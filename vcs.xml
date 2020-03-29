@@ -6,7 +6,12 @@
           <option name="url" value="http://github.com" />
           <option name="userName" value="ashwinj" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/ashwinj/Offseason.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
+    <option name="cloneParentDir" value="C:\Users\FTC\Downloads" />
   </component>
 </application>
