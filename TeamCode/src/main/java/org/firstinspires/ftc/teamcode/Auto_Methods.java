@@ -40,8 +40,10 @@ public class Auto_Methods extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
     private BNO055IMU imu;
-
-    private Hardware robot = new Hardware();
+    public Hardware robot = new Hardware();
+    private double gearRatio = 2;
+    private double wheelDiameter = 4;
+    private double encoderCnts = 560; //counts per one rotation of output shaft
 
     public void initRobot() {
         robot.initTeleOpNOIMU(hardwareMap);
@@ -103,8 +105,15 @@ public class Auto_Methods extends LinearOpMode {
         }
         return .3;
     }
+    /*
+    private double accelDeccel(double timePassed, double timeTarget, double speedTarget, double distanceTarget){
+        double speed =
+        if(robot.backLeftMotor.getCurrentPosition()<distanceTarget){
+            speed
+        }
+    }
 
-
+*/
     //defining Methods for the robot
 
     //moving forward distance (m) with power [0, 1]
@@ -114,7 +123,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = (int) ((distance / (wheelDiameter * Math.PI)) * (encoderCnts / gearRatio));
 
 
         //setting all motors to go forward (positive)
@@ -157,7 +166,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int counts = -(int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = -(int) ((distance / (wheelDiameter * Math.PI)) * (encoderCnts / gearRatio));
 
         //setting all motors to go forward (positive)
 
@@ -303,7 +312,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int counts = (int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = (int) ((distance / (wheelDiameter * Math.PI)) * (encoderCnts / gearRatio));
 
         //setting all motors to go forward (positive)
 
@@ -346,7 +355,7 @@ public class Auto_Methods extends LinearOpMode {
         robot.frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        int counts = -(int) ((distance / (4 * Math.PI)) * 1075);
+        int counts = -(int) ((distance / (wheelDiameter * Math.PI)) * (encoderCnts / gearRatio));
 
         //setting all motors to go forward (positive)
 

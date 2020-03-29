@@ -19,12 +19,5 @@ public class test extends Auto_Methods {
 
         //initializing robot
         initRobot();
-        right(180);
-        sleep(10000);
-        right(180);
-        //sleep(1000);
-        //left(180);
-
-
     }
 }
