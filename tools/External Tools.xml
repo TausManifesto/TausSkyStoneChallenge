@@ -2,14 +2,14 @@
   <tool name="Enable ADB over TCP/IP" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="true" showConsoleOnStdOut="false" showConsoleOnStdErr="false" synchronizeAfterRun="true">
     <exec>
       <option name="COMMAND" value="$ModuleSdkPath$/platform-tools/adb" />
-      <option name="PARAMETERS" value="tcpip 5555" />
+      <option name="PARAMETERS" value="tcpip 8080" />
       <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
     </exec>
   </tool>
   <tool name="Connect to ADB over TCP/IP" showInMainMenu="false" showInEditor="false" showInProject="false" showInSearchPopup="false" disabled="false" useConsole="true" showConsoleOnStdOut="false" showConsoleOnStdErr="false" synchronizeAfterRun="true">
     <exec>
       <option name="COMMAND" value="$ModuleSdkPath$/platform-tools/adb" />
-      <option name="PARAMETERS" value="connect 192.168.49.1:5555" />
+      <option name="PARAMETERS" value="connect 192.168.49.1:8080" />
       <option name="WORKING_DIRECTORY" value="$ProjectFileDir$" />
     </exec>
   </tool>
