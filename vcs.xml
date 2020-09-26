@@ -18,6 +18,10 @@
           <option name="url" value="https://github.com/ashwinj/SkystoneCamp.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/ashwinj/Ultimate_Goal.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="C:\Users\FTC\Downloads" />
